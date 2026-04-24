@@ -1,0 +1,76 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { Image } from "astro:assets";
+
+// Ziskanie kolekcie s typovanim
+const projekty = await getCollection("projekty");
+
+const zoradeneProjekty: CollectionEntry<"projekty">[] = [...projekty].sort(
+  (a: CollectionEntry<"projekty">, b: CollectionEntry<"projekty">) =>
+    parseInt(b.data.year || "0") - parseInt(a.data.year || "0"),
+);
+---
+
+<BaseLayout title="Projekty | BAM.">
+  <main class="bg-white pt-32 md:pt-48 pb-24 px-6">
+    <div class="max-w-7xl mx-auto">
+      <header class="mb-20 md:mb-32">
+        <h1
+          class="text-6xl md:text-[10rem] font-black italic uppercase tracking-tighter leading-[0.8] mb-8 overflow-visible pr-4"
+        >
+          Archív<span class="text-[#0000FF]">!</span>
+        </h1>
+        <div
+          class="flex flex-col md:flex-row md:items-center justify-between gap-6 border-t border-black pt-8"
+        >
+        </div>
+      </header>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-32">
+        {
+          zoradeneProjekty.map((projekt) => (
+            <a
+              href={`/projekty/${projekt.id}`}
+              class="group block relative no-underline text-black"
+            >
+              <div class="overflow-hidden bg-gray-50 aspect-[16/10] mb-8 border border-black/5 flex items-center justify-center p-4">
+                <Image
+                  src={projekt.data.coverImage}
+                  alt={projekt.data.title}
+                  class="w-full h-full object-contain transition-all duration-[1.5s] ease-in-out
+                         grayscale-0 md:grayscale md:group-hover:grayscale-0 md:group-hover:scale-105"
+                />
+              </div>
+
+              <div class="flex justify-between items-end">
+                <div class="flex-1">
+                  <h2 class="text-3xl md:text-5xl font-black italic uppercase tracking-tighter leading-none group-hover:text-[#0000FF] transition-colors overflow-visible pr-4">
+                    {projekt.data.title}
+                  </h2>
+                  <div class="flex items-center gap-4 mt-4">
+                    <span class="label-tech text-[10px] text-black/40">
+                      {projekt.data.location || "Slovensko"}
+                    </span>
+                    <span class="w-8 h-[1px] bg-black/10" />
+                    <span class="label-tech text-[10px] text-[#0000FF]">
+                      {projekt.data.year}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="flex flex-col items-end">
+                  <span class="text-[#0000FF] translate-x-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-3xl italic font-black">
+                    →
+                  </span>
+                </div>
+              </div>
+
+              <div class="absolute -bottom-10 left-0 w-full h-[1px] bg-black/5 group-hover:bg-[#0000FF] transition-colors duration-500" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </main>
+</BaseLayout>

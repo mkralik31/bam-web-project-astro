@@ -1,0 +1,178 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+
+// Nacitanie vsetkych projektov
+const vsetkyProjekty = await getCollection("projekty");
+
+// Najdenie konkretneho projektu pre Hero
+const heroProjekt =
+  vsetkyProjekty.find(
+    (p: CollectionEntry<"projekty">) => p.id === "03_byt-m",
+  ) || vsetkyProjekty[0];
+
+const zoradeneProjekty = [...vsetkyProjekty].sort(
+  (a: CollectionEntry<"projekty">, b: CollectionEntry<"projekty">) =>
+    Number(b.data.year) - Number(a.data.year),
+);
+
+const zobrazeneProjekty = zoradeneProjekty.slice(0, 6);
+---
+
+<BaseLayout title="Domov | BÄM!">
+  <section
+    class="h-[100svh] flex items-center justify-center bg-black text-white overflow-hidden sticky top-0"
+  >
+    <div class="absolute inset-0 opacity-40">
+      {
+        heroProjekt && (
+          <Image
+            src={heroProjekt.data.coverImage}
+            class="w-full h-full object-cover scale-105"
+            alt="Hero background"
+            loading="eager"
+          />
+        )
+      }
+    </div>
+
+    <div
+      class="relative z-10 flex flex-col items-center px-4 w-full max-w-5xl text-center"
+    >
+      <div
+        class="w-[35vw] md:w-[20vw] max-w-2xl transform hover:scale-105 transition-transform duration-700"
+      >
+        <img
+          src="/logo-bam.png"
+          alt="BAM Studio Logo"
+          class="w-full h-auto brightness-0 invert"
+        />
+      </div>
+      <p
+        class="label-tech mt-12 opacity-60 border-t border-white/20 pt-8 w-fit mx-auto"
+      >
+        architektonický ateliér
+      </p>
+    </div>
+
+    <div
+      class="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-30 animate-bounce"
+    >
+      <span
+        class="text-[9px] uppercase tracking-[0.5em] font-extrabold italic rotate-90 inline-block text-white"
+        >Scroll</span
+      >
+    </div>
+  </section>
+
+  <div class="relative z-30 bg-white">
+    <div class="border-t border-black px-8 py-6 bg-white">
+      <div class="max-w-7xl mx-auto flex justify-start items-center">
+        <span class="label-tech text-[#0000FF]">BÄM! projekty</span>
+      </div>
+    </div>
+
+    <div class="flex flex-col bg-white py-12 md:py-24">
+      {
+        zobrazeneProjekty.map((projekt, index) => (
+          <section class="mb-12 md:mb-24 px-6">
+            <a
+              href={`/projekty/${projekt.id}`}
+              class="block no-underline group max-w-6xl mx-auto border-b border-black/10 pb-12 md:pb-24"
+            >
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div
+                  class={`flex flex-col justify-center ${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}
+                >
+                  <div class="mb-6">
+                    <span class="label-tech text-[#0000FF] block mb-2">
+                      {projekt.data.year} · {projekt.data.location}
+                    </span>
+                    <h3 class="text-4xl sm:text-5xl lg:text-6xl font-black italic tracking-tighter leading-[0.9] uppercase text-black group-hover:text-[#0000FF] transition-colors duration-300">
+                      {projekt.data.title}
+                    </h3>
+                  </div>
+                  <p class="text-black/60 font-light italic text-lg max-w-sm">
+                    {projekt.data.description}
+                  </p>
+                </div>
+
+                <div
+                  class={`relative overflow-hidden aspect-[4/3] bg-gray-50 ${index % 2 === 0 ? "md:order-2" : "md:order-1"}`}
+                >
+                  <Image
+                    src={projekt.data.coverImage}
+                    alt={projekt.data.title}
+                    width={900}
+                    class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-[1.5s] ease-out"
+                  />
+                </div>
+              </div>
+            </a>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+
+  <div class="relative z-[25] sticky top-0">
+    <footer
+      id="kontakt"
+      class="relative bg-black text-white pt-20 pb-12 px-8 border-t border-white/10"
+    >
+      <div class="max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-end">
+          <div>
+            <div class="mb-12 w-32 md:w-48">
+              <img
+                src="/logo-bam.png"
+                alt="BAM Logo"
+                class="w-full h-auto brightness-0 invert"
+              />
+            </div>
+            <div class="space-y-4">
+              <p class="label-tech text-[#0000FF]">BÄM! ateliér</p>
+              <p
+                class="text-white/50 text-sm max-w-[300px] leading-relaxed italic font-light"
+              >
+                Vytvárame priestory, ktoré majú názor. Sústredíme sa na estetiku
+                a funkčný detail.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-12 md:items-end">
+            <div class="flex flex-col md:items-end space-y-3">
+              <span class="label-tech text-white/20">E-mail</span>
+              <a
+                href="mailto:info@bamatelier.sk"
+                class="text-3xl md:text-5xl font-black hover:text-[#0000FF] transition-colors tracking-tighter no-underline"
+              >
+                info@atelierbam.sk
+              </a>
+            </div>
+
+            <div class="flex flex-col md:items-end space-y-3">
+              <span class="label-tech text-white/20">Mobil</span>
+              <a
+                href="tel:+421944492848"
+                class="text-xl md:text-2xl font-extrabold hover:text-[#0000FF] transition-colors tracking-widest no-underline"
+              >
+                +421 944 492 848
+              </a>
+            </div>
+
+            <div
+              class="pt-12 border-t border-white/5 w-full flex flex-col md:flex-row justify-end items-end gap-8"
+            >
+              <span class="label-tech text-white/10 tracking-[0.3em]"
+                >© 2026 BÄM! s.r.o.</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</BaseLayout>

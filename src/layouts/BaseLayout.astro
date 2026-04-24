@@ -1,0 +1,339 @@
+---
+import "../styles/global.css";
+const { title = "BAM!" } = Astro.props;
+---
+
+<html lang="sk">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body
+    class="bg-white text-black antialiased selection:bg-[#0000FF] selection:text-white"
+  >
+    <nav class="fixed top-8 left-1/2 -translate-x-1/2 z-[100] w-fit">
+      <div
+        class="bg-white/90 backdrop-blur-xl border border-black/5 px-10 py-4 rounded-full shadow-[0_20px_40px_rgba(0,0,0,0.08)] flex gap-10 items-center"
+      >
+        <div class="flex gap-10 items-center text-black">
+          <a href="/" class="group flex flex-col items-center no-underline">
+            <span
+              class="text-[10px] font-black italic uppercase tracking-[0.4em] hover:text-[#0000FF] transition-colors"
+              >Domov</span
+            >
+            <div
+              class="w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity mt-1"
+            >
+            </div>
+          </a>
+
+          <a
+            href="/projekty"
+            class="group flex flex-col items-center no-underline"
+          >
+            <span
+              class="text-[10px] font-black italic uppercase tracking-[0.4em] hover:text-[#0000FF] transition-colors"
+              >Projekty</span
+            >
+            <div
+              class="w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity mt-1"
+            >
+            </div>
+          </a>
+
+          <button
+            id="open-contact"
+            class="group flex flex-col items-center bg-transparent border-none p-0 cursor-pointer outline-none"
+          >
+            <span
+              class="text-[10px] font-black italic uppercase tracking-[0.4em] hover:text-[#0000FF] transition-colors text-black"
+              >Kontakt</span
+            >
+            <div
+              class="w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity mt-1"
+            >
+            </div>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <slot />
+    </main>
+
+    <div
+      id="contact-overlay"
+      class="fixed inset-0 bg-black text-white px-6 flex flex-col overflow-y-auto custom-scrollbar"
+      style="z-index: 999999; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.85, 0, 0.15, 1); visibility: hidden; position: fixed; top: 0; left: 0; width: 100%; height: 100svh;"
+    >
+      <div
+        class="sticky top-0 bg-black z-10 w-full shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+      >
+        <div
+          class="max-w-7xl mx-auto py-8 md:py-10 flex justify-between items-center"
+        >
+          <img
+            src="/logo-bam.png"
+            alt="BAM"
+            class="h-10 md:h-12 w-auto brightness-0 invert"
+          />
+
+          <button
+            id="close-contact"
+            type="button"
+            class="group flex items-center gap-4 bg-transparent border-none cursor-pointer p-2"
+          >
+            <div class="relative w-6 h-6 flex items-center justify-center">
+              <span
+                class="absolute w-full h-[1px] bg-white rotate-45 transition-transform group-hover:scale-110"
+              ></span>
+              <span
+                class="absolute w-full h-[1px] bg-white -rotate-45 transition-transform group-hover:scale-110"
+              ></span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="flex-1 flex flex-col justify-start md:justify-center max-w-5xl mx-auto w-full pt-10 pb-32"
+      >
+        <h2
+          class="text-4xl md:text-7xl font-black italic uppercase tracking-[ -0.05em] mb-12 md:mb-16 leading-[1.1] pr-10"
+        >
+          Povedzte nám <br />
+          o vašom <span class="text-[#0000FF]">zámere.</span>
+        </h2>
+
+        <form
+          id="contact-form"
+          action="https://formspree.io/f/xeevvejj"
+          method="POST"
+          class="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-10 md:gap-y-12"
+        >
+          <div class="flex flex-col gap-3 group">
+            <label
+              class="label-tech text-[10px] uppercase tracking-widest text-white/30 group-focus-within:text-[#0000FF] transition-colors"
+            >
+              Vaše meno
+            </label>
+            <input
+              type="text"
+              required
+              name="name"
+              class="bg-transparent border-b border-white/10 py-4 outline-none focus:border-[#0000FF] transition-colors text-xl md:text-2xl font-light italic text-white placeholder:text-white/5"
+              placeholder="Meno a priezvisko"
+            />
+          </div>
+
+          <div class="flex flex-col gap-3 group">
+            <label
+              class="label-tech text-[10px] uppercase tracking-widest text-white/30 group-focus-within:text-[#0000FF] transition-colors"
+            >
+              E-mail
+            </label>
+            <input
+              type="email"
+              required
+              name="email"
+              class="bg-transparent border-b border-white/10 py-4 outline-none focus:border-[#0000FF] transition-colors text-xl md:text-2xl font-light italic text-white placeholder:text-white/5"
+              placeholder="email@domena.sk"
+            />
+          </div>
+
+          <div class="flex flex-col gap-3 md:col-span-2 group">
+            <label
+              class="label-tech text-[10px] uppercase tracking-widest text-white/30 group-focus-within:text-[#0000FF] transition-colors"
+            >
+              O čom uvažujete?
+            </label>
+            <textarea
+              id="contact-message"
+              name="message"
+              rows="1"
+              class="bg-transparent border-b border-white/10 py-4 outline-none focus:border-[#0000FF] transition-colors text-xl md:text-2xl font-light italic resize-none text-white placeholder:text-white/5"
+              placeholder="Rodinný dom, interiér, rekonštrukcia..."></textarea>
+          </div>
+
+          <div class="md:col-span-2 mt-8 md:mt-12">
+            <button
+              type="submit"
+              class="group flex items-center gap-6 bg-transparent border-none text-white cursor-pointer p-0"
+            >
+              <span
+                class="text-3xl md:text-5xl font-black italic uppercase tracking-tighter hover:text-[#0000FF] transition-all"
+              >
+                Odoslať dopyt
+              </span>
+              <span
+                class="text-4xl text-[#0000FF] transition-transform group-hover:translate-x-4"
+              >
+                →
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <style is:global>
+      :root {
+        --brand-blue: #0000ff;
+      }
+
+      html {
+        font-family: "Inter", system-ui, sans-serif;
+        scroll-behavior: smooth;
+        background-color: black;
+      }
+
+      /* Skrytie scrollbaru */
+      body {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
+      body::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Technicky popisok - JEDNOTNY STYL */
+      .label-tech {
+        font-size: 9px !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5em !important;
+        font-weight: 800 !important;
+        font-style: italic !important;
+        line-height: 1 !important;
+        display: inline-block;
+      }
+
+      /* Animacie */
+      @keyframes pulse-bg {
+        0%,
+        100% {
+          opacity: 0.4;
+          transform: scale(1.05);
+        }
+        50% {
+          opacity: 0.2;
+          transform: scale(1.1);
+        }
+      }
+
+      .animate-pulse-slow {
+        animation: pulse-bg 8s ease-in-out infinite;
+      }
+
+      /* Autofill fix pre tmavy rezim */
+      input:-webkit-autofill,
+      textarea:-webkit-autofill {
+        -webkit-text-fill-color: white !important;
+        -webkit-box-shadow: 0 0 0px 1000px black inset !important;
+        transition: background-color 5000s ease-in-out 0s;
+      }
+    </style>
+
+    <script is:inline>
+      function initContact() {
+        const openBtn = document.getElementById("open-contact");
+        const closeBtn = document.getElementById("close-contact");
+        const overlay = document.getElementById("contact-overlay");
+        const form = document.getElementById("contact-form");
+
+        if (openBtn && overlay && closeBtn) {
+          openBtn.onclick = (e) => {
+            e.preventDefault();
+            overlay.style.visibility = "visible";
+            overlay.style.transform = "translateY(0)";
+            document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
+          };
+
+          const closeAction = () => {
+            overlay.style.transform = "translateY(100%)";
+            document.body.style.overflow = "";
+            document.documentElement.style.overflow = "";
+            setTimeout(() => {
+              if (overlay.style.transform === "translateY(100%)") {
+                overlay.style.visibility = "hidden";
+              }
+            }, 600);
+          };
+
+          closeBtn.onclick = closeAction;
+
+          if (form) {
+            form.onsubmit = async (e) => {
+              e.preventDefault();
+              const btn = form.querySelector('button[type="submit"]');
+              const originalBtnContent = btn.innerHTML;
+              btn.innerHTML = "ODOSIELAM...";
+              btn.style.opacity = "0.5";
+              btn.disabled = true;
+
+              try {
+                // Pozbieram data z formulara
+                const formData = new FormData(form);
+
+                // Poslem na Formspree API endpoint
+                const response = await fetch(form.action, {
+                  method: "POST",
+                  body: formData,
+                  headers: {
+                    Accept: "application/json",
+                  },
+                });
+
+                if (response.ok) {
+                  // Ok stav
+                  form.innerHTML = `
+                    <div class="py-20">
+                      <h3 class="text-4xl md:text-6xl font-black italic uppercase text-[#0000FF] mb-6 tracking-tighter">Ďakujeme.</h3>
+                      <p class="text-xl text-gray-400 font-light italic leading-relaxed">Váš zámer sme prijali. Ozveme sa vám čoskoro.</p>
+                      <button onclick="location.reload()" class="mt-12 text-[9px] uppercase tracking-[0.5em] font-black italic border-b border-white/20 pb-2 hover:text-[#0000FF] hover:border-[#0000FF] transition-all">Naspäť</button>
+                    </div>`;
+                } else {
+                  // Chybovy stav
+                  const data = await response.json();
+                  console.error("Formspree error:", data);
+                  form.innerHTML = `
+                    <div class="py-20">
+                      <h3 class="text-4xl md:text-6xl font-black italic uppercase text-red-500 mb-6 tracking-tighter">Chyba.</h3>
+                      <p class="text-xl text-gray-400 font-light italic leading-relaxed">Pri odosielaní správy sa vyskytla chyba. Skúste to prosím znova.</p>
+                      <button onclick="location.reload()" class="mt-12 text-[9px] uppercase tracking-[0.5em] font-black italic border-b border-white/20 pb-2 hover:text-red-500 hover:border-red-500 transition-all">Skúsiť znova</button>
+                    </div>`;
+                }
+              } catch (error) {
+                console.error("Form submission error:", error);
+                // Network/client chybovy stav
+                btn.innerHTML = originalBtnContent;
+                btn.style.opacity = "1";
+                btn.disabled = false;
+                alert(
+                  "Nepodarilo sa odoslať správu. Skontrolujte pripojenie k internetu a skúste znova.",
+                );
+              }
+            };
+          }
+
+          window.addEventListener("keydown", (e) => {
+            if (e.key === "Escape") closeAction();
+          });
+        }
+      }
+
+      initContact();
+      document.addEventListener("astro:after-swap", initContact);
+      document.addEventListener("astro:page-load", initContact);
+    </script>
+  </body>
+</html>

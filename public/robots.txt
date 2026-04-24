@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /
+
+# PRODUKCNA VERZIA
+#User-agent: *
+#Allow: /
+
+#Sitemap: https://atelierbam.sk/sitemap-index.xml

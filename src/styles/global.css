@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+:global(body) {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.label-tech {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1;
+}
+
+body {
+  background-color: white;
+  @apply antialiased;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reset odkazov */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+::selection {
+  background-color: #0000FF;
+  color: white;
+}
+
+/*  SCROLLBAR */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Pre Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+}
+
+/* Animacie a pomocne triedy */
+.animate-pulse-slow {
+  animation: pulse-bg 8s ease-in-out infinite;
+}
+
+@keyframes pulse-bg {
+
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+
+  50% {
+    opacity: 0.2;
+    transform: scale(1.1);
+  }
+}
+
+ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}

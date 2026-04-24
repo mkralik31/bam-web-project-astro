@@ -1,0 +1,8 @@
+---
+// src/components/Link.astro
+const { href, class: className } = Astro.props;
+---
+
+<a href={href} class={className}>
+  <slot />
+</a>
