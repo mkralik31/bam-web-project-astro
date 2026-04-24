@@ -24,41 +24,44 @@ const { title = "BAM!" } = Astro.props;
         class="bg-white/90 backdrop-blur-xl border border-black/5 px-10 py-4 rounded-full shadow-[0_20px_40px_rgba(0,0,0,0.08)] flex gap-10 items-center"
       >
         <div class="flex gap-10 items-center text-black">
-          <a href="/" class="group flex flex-col items-center no-underline">
+          <a
+            href="/"
+            class="group relative flex flex-col items-center no-underline"
+          >
             <span
               class="text-[10px] font-black italic uppercase tracking-[0.4em] hover:text-[#0000FF] transition-colors"
               >Domov</span
             >
             <div
-              class="w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity mt-1"
+              class="absolute -bottom-2 w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
             >
             </div>
           </a>
 
           <a
             href="/projekty"
-            class="group flex flex-col items-center no-underline"
+            class="group relative flex flex-col items-center no-underline"
           >
             <span
               class="text-[10px] font-black italic uppercase tracking-[0.4em] hover:text-[#0000FF] transition-colors"
               >Projekty</span
             >
             <div
-              class="w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity mt-1"
+              class="absolute -bottom-2 w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
             >
             </div>
           </a>
 
           <button
             id="open-contact"
-            class="group flex flex-col items-center bg-transparent border-none p-0 cursor-pointer outline-none"
+            class="group relative flex flex-col items-center bg-transparent border-none p-0 cursor-pointer outline-none"
           >
             <span
               class="text-[10px] font-black italic uppercase tracking-[0.4em] hover:text-[#0000FF] transition-colors text-black"
               >Kontakt</span
             >
             <div
-              class="w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity mt-1"
+              class="absolute -bottom-2 w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
             >
             </div>
           </button>

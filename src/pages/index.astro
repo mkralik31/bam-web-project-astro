@@ -190,8 +190,8 @@ const zobrazeneProjekty = zoradeneProjekty.slice(0, 6);
     if (window.innerWidth < 768) {
       const observerOptions = {
         root: null,
-        rootMargin: "-20% 0px -20% 0px",
-        threshold: 0,
+        rootMargin: "0px",
+        threshold: 0.8,
       };
 
       observer = new IntersectionObserver((entries) => {
