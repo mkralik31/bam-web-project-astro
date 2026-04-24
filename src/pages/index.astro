@@ -76,7 +76,7 @@ const zobrazeneProjekty = zoradeneProjekty.slice(0, 6);
     <div class="flex flex-col bg-white py-12 md:py-24">
       {
         zobrazeneProjekty.map((projekt, index) => (
-          <section class="mb-12 md:mb-24 px-6">
+          <section class="projekt-card mb-12 md:mb-24 px-6">
             <a
               href={`/projekty/${projekt.id}`}
               class="block no-underline group max-w-6xl mx-auto border-b border-black/10 pb-12 md:pb-24"
@@ -176,3 +176,55 @@ const zobrazeneProjekty = zoradeneProjekty.slice(0, 6);
     </footer>
   </div>
 </BaseLayout>
+
+<script>
+  let observer: IntersectionObserver | undefined;
+
+  function initObserver() {
+    // Ak uz observer bezi, odpoj ho (pri resizovani)
+    if (observer) {
+      observer.disconnect();
+    }
+
+    // Spusti efekt len ak je sirka pre mobil
+    if (window.innerWidth < 768) {
+      const observerOptions = {
+        root: null,
+        rootMargin: "-20% 0px -20% 0px",
+        threshold: 0,
+      };
+
+      observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          } else {
+            entry.target.classList.remove("is-visible");
+          }
+        });
+      }, observerOptions);
+
+      if (observer) {
+        document.querySelectorAll(".projekt-card").forEach((card) => {
+          observer!.observe(card);
+        });
+      }
+    } else {
+      // Ak je desktop, kontroluj ze triedy su odstranene
+      document.querySelectorAll(".projekt-card").forEach((card) => {
+        card.classList.remove("is-visible");
+      });
+    }
+  }
+
+  initObserver();
+
+  let resizeTimeout: number | undefined;
+
+  window.addEventListener("resize", () => {
+    if (resizeTimeout) {
+      clearTimeout(resizeTimeout);
+    }
+    resizeTimeout = window.setTimeout(initObserver, 200);
+  });
+</script>
