@@ -10,6 +10,7 @@ const projekty = defineCollection({
     z.object({
       title: z.string(),
       description: z.string(),
+      type: z.string(),
       coverImage: image(),
       location: z.string().optional(),
       year: z.string().or(z.number()).optional().transform(v => String(v)),

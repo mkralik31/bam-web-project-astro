@@ -1,0 +1,43 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Ďakujeme | BÄM!">
+  <section
+    class="min-h-[100svh] flex items-center justify-center bg-white text-black px-6 py-32"
+  >
+    <div class="max-w-2xl mx-auto text-center">
+      <div class="mb-8">
+        <span class="label-tech text-[#0000FF]">BÄM!</span>
+      </div>
+
+      <h1
+        class="text-5xl md:text-7xl font-black italic uppercase tracking-[-0.05em] mb-8 leading-[1.1] text-black"
+      >
+        Ďakujeme za <span class="text-[#0000FF]">Váš dopyt.</span>
+      </h1>
+
+      <p
+        class="text-xl md:text-2xl text-black/60 font-light italic mb-12 leading-relaxed"
+      >
+        Vašu správu sme úspešne prijali. Budeme sa jej venovať čo najskôr.
+      </p>
+
+      <a
+        href="/"
+        class="group inline-flex items-center gap-4 bg-transparent border-none text-black no-underline cursor-pointer"
+      >
+        <span
+          class="text-2xl md:text-3xl font-black italic uppercase tracking-tighter hover:text-[#0000FF] transition-all"
+        >
+          Späť na hlavnú stránku
+        </span>
+        <span
+          class="text-3xl text-[#0000FF] transition-transform group-hover:translate-x-2"
+        >
+          →
+        </span>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
