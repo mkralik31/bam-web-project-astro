@@ -8,6 +8,7 @@ import sitemap from '@astrojs/sitemap';
 const { PUBLIC_SITE_URL } = loadEnv(process.env.NODE_ENV || 'development', process.cwd(), '');
 
 export default defineConfig({
+  output: 'static',
   site: PUBLIC_SITE_URL || 'https://atelierbam.sk',
 
   vite: {

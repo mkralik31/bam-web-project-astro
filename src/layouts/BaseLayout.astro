@@ -119,10 +119,23 @@ const { title = "BAM!" } = Astro.props;
 
         <form
           id="contact-form"
-          action="https://formspree.io/f/xeevvejj"
+          action="https://api.web3forms.com/submit"
           method="POST"
           class="grid grid-cols-1 md:grid-cols-2 gap-x-20 gap-y-10 md:gap-y-12"
         >
+          <!-- Web3Forms access key -->
+          <input
+            type="hidden"
+            name="access_key"
+            value="dda73167-8616-41dd-960e-5fc317275fd5"
+          />
+          <!-- Web3Forms subject -->
+          <input type="hidden" name="subject" value="Nový dopyt z BÄM! webu" />
+          <!-- Web3Forms anti-spam -->
+          <input type="checkbox" name="botcheck" class="hidden" />
+
+          <input type="hidden" name="from_name" value="Web Studio BÄM" />
+
           <div class="flex flex-col gap-3 group">
             <label
               class="label-tech text-[10px] uppercase tracking-widest text-white/30 group-focus-within:text-[#0000FF] transition-colors"
@@ -147,7 +160,7 @@ const { title = "BAM!" } = Astro.props;
             <input
               type="email"
               required
-              name="email"
+              name="replyto"
               class="bg-transparent border-b border-white/10 py-4 outline-none focus:border-[#0000FF] transition-colors text-xl md:text-2xl font-light italic text-white placeholder:text-white/5"
               placeholder="email@domena.sk"
             />
@@ -303,10 +316,10 @@ const { title = "BAM!" } = Astro.props;
               btn.disabled = true;
 
               try {
-                // Pozbieram data z formulara
+                // Collect form data
                 const formData = new FormData(form);
 
-                // Poslem na Formspree API endpoint
+                // Submit to Web3Forms API endpoint
                 const response = await fetch(form.action, {
                   method: "POST",
                   body: formData,
@@ -315,8 +328,10 @@ const { title = "BAM!" } = Astro.props;
                   },
                 });
 
-                if (response.ok) {
-                  // Ok stav
+                const data = await response.json();
+
+                if (data.success) {
+                  // Success state
                   form.innerHTML = `
                     <div class="py-20">
                       <h3 class="text-4xl md:text-6xl font-black italic uppercase text-[#0000FF] mb-6 tracking-tighter">Ďakujeme.</h3>
@@ -324,9 +339,8 @@ const { title = "BAM!" } = Astro.props;
                       <button onclick="location.reload()" class="mt-12 text-[9px] uppercase tracking-[0.5em] font-black italic border-b border-white/20 pb-2 hover:text-[#0000FF] hover:border-[#0000FF] transition-all">Naspäť</button>
                     </div>`;
                 } else {
-                  // Chybovy stav
-                  const data = await response.json();
-                  console.error("Formspree error:", data);
+                  // Error state from API
+                  console.error("Web3Forms error:", data);
                   form.innerHTML = `
                     <div class="py-20">
                       <h3 class="text-4xl md:text-6xl font-black italic uppercase text-red-500 mb-6 tracking-tighter">Chyba.</h3>
@@ -336,7 +350,7 @@ const { title = "BAM!" } = Astro.props;
                 }
               } catch (error) {
                 console.error("Form submission error:", error);
-                // Network/client chybovy stav
+                // Network/client error state
                 btn.innerHTML = originalBtnContent;
                 btn.style.opacity = "1";
                 btn.disabled = false;
