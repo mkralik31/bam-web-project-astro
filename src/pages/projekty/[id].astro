@@ -81,33 +81,43 @@ const galleryImports = galleryImages
             ← Archív projektov
           </a>
           <h1
-            class="text-5xl md:text-8xl font-black italic tracking-tighter leading-[0.85] uppercase overflow-visible pr-4"
+            class="text-5xl md:text-8xl font-black italic tracking-tighter leading-[0.85] uppercase overflow-visible pr-4 whitespace-nowrap"
           >
             {projekt.data.title}
           </h1>
         </div>
 
-        <div class="flex gap-12 border-l border-black/5 pl-8 md:pl-12 py-2">
+        <div
+          class="grid grid-cols-2 gap-y-6 gap-x-4 min-[450px]:flex min-[450px]:gap-12 border-l border-black/5 pl-6 md:pl-12 py-2"
+        >
           <div>
-            <span class="label-tech text-black/30 block mb-2">Lokalita</span>
+            <span class="label-tech text-black/30 block mb-2 text-[10px]"
+              >Lokalita</span
+            >
             <span
-              class="text-[11px] font-black uppercase italic tracking-wider"
+              class="text-[11px] font-black uppercase italic tracking-wider block"
             >
               {projekt.data.location || "SR"}
             </span>
           </div>
+
           <div>
-            <span class="label-tech text-black/30 block mb-2">Rok</span>
+            <span class="label-tech text-black/30 block mb-2 text-[10px]"
+              >Rok</span
+            >
             <span
-              class="text-[11px] font-black italic text-[#0000FF] tracking-wider"
+              class="text-[11px] font-black italic text-[#0000FF] tracking-wider block"
             >
               {projekt.data.year || "2026"}
             </span>
           </div>
-          <div>
-            <span class="label-tech text-black/30 block mb-2">BÄM!</span>
+
+          <div class="col-span-2 min-[450px]:col-auto">
+            <span class="label-tech text-black/30 block mb-2 text-[10px]"
+              >BÄM!</span
+            >
             <span
-              class="text-[11px] font-black italic uppercase text-[#0000FF] tracking-wider"
+              class="text-[11px] font-black italic uppercase text-[#0000FF] tracking-wider block"
             >
               {projekt.data.type}
             </span>
@@ -122,19 +132,21 @@ const galleryImports = galleryImages
       <Image
         src={projekt.data.coverImage}
         alt={projekt.data.title}
-        class="w-full h-full object-contain transition-all duration-[1.5s] ease-in-out grayscale-0 md:grayscale md:hover:grayscale-0 md:hover:scale-105"
+        class="w-full h-full object-contain transition-all duration-[1.5s] ease-in-out
+         grayscale-0
+         lg:grayscale lg:hover:grayscale-0 lg:hover:scale-105"
       />
     </div>
 
     <div class="max-w-7xl mx-auto px-6 mb-32">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
-        <div class="md:col-span-3">
+        <!-- <div class="md:col-span-3">
           <div class="sticky top-32">
             <h2 class="label-tech text-[#0000FF] mb-8">Koncept</h2>
           </div>
-        </div>
+        </div> -->
 
-        <div class="md:col-span-9">
+        <!-- <div class="md:col-span-9">
           <div
             class="prose prose-lg prose-neutral max-w-3xl
             prose-p:text-black/70 prose-p:text-xl prose-p:font-light prose-p:leading-[1.8] prose-p:italic
@@ -147,7 +159,7 @@ const galleryImports = galleryImages
             </p>
             <div set:html={textContent.replace(/###[^\n]*\n/g, "")} />
           </div>
-        </div>
+        </div> -->
       </div>
 
       {

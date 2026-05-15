@@ -38,11 +38,9 @@ const zoradeneProjekty: CollectionEntry<"projekty">[] = [...projekty].sort(
                 <Image
                   src={projekt.data.coverImage}
                   alt={projekt.data.title}
-                  class="w-full h-full object-contain transition-all duration-[1.5s] ease-in-out
-                         grayscale-0 md:grayscale md:group-hover:grayscale-0 md:group-hover:scale-105"
+                  class="w-full h-full object-contain transition-all duration-[1.5s] ease-in-out grayscale-0 scale-100 lg:grayscale lg:group-hover:grayscale-0 lg:group-hover:scale-105"
                 />
               </div>
-
               <div class="flex justify-between items-end">
                 <div class="flex-1">
                   <h2 class="text-3xl md:text-5xl font-black italic uppercase tracking-tighter leading-none group-hover:text-[#0000FF] transition-colors overflow-visible pr-4">

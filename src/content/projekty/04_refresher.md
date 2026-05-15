@@ -3,7 +3,7 @@ title: "REFRESHER"
 description: "Office pre mladú generáciu"
 type: "realizácia"
 coverImage: "../../assets/05_REFRESHER.jpg"
-location: "Bratislava, SR"
+location: "Bratislava"
 year: "2024"
 ---
 

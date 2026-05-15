@@ -23,6 +23,13 @@ html {
   scroll-behavior: smooth;
 }
 
+html,
+body {
+  overflow-x: hidden;
+  position: relative;
+  width: 100%;
+}
+
 /* Reset odkazov */
 a {
   text-decoration: none;
