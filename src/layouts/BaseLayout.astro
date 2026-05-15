@@ -27,7 +27,7 @@ const { title = "BAM!" } = Astro.props;
       >
         <a
           href="/"
-          class="group relative flex flex-col items-center no-underline transition-all duration-300 hover:-translate-y-0.5 hover:scale-105"
+          class="nav-link group relative flex flex-col items-center no-underline transition-all duration-300 hover:-translate-y-0.5 hover:scale-105"
         >
           <span
             class="text-[10px] font-black italic uppercase tracking-[0.2em] min-[400px]:tracking-[0.4em] text-[#0000FF]"
@@ -42,7 +42,7 @@ const { title = "BAM!" } = Astro.props;
 
         <a
           href="/projekty"
-          class="group relative flex flex-col items-center no-underline transition-all duration-300 hover:-translate-y-0.5 hover:scale-105"
+          class="nav-link group relative flex flex-col items-center no-underline transition-all duration-300 hover:-translate-y-0.5 hover:scale-105"
         >
           <span
             class="text-[10px] font-black italic uppercase tracking-[0.2em] min-[400px]:tracking-[0.4em] text-[#0000FF]"
@@ -285,7 +285,81 @@ const { title = "BAM!" } = Astro.props;
           transition: color 0.5s ease-out !important;
         }
       }
+
+      /* Active link state */
+      .nav-link.active > span {
+        color: #0000ff !important;
+      }
+
+      .nav-link.active > div {
+        bottom: -10px !important;
+      }
     </style>
+
+    <script is:inline>
+      function initNavigation() {
+        const navLinks = document.querySelectorAll(".nav-link");
+        const contactBtn = document.getElementById("open-contact");
+
+        // Set active state based on current path
+        function setActiveLink() {
+          const currentPath = window.location.pathname;
+
+          navLinks.forEach((link) => {
+            const href = link.getAttribute("href");
+
+            // Remove active class from all links first
+            link.classList.remove("active");
+
+            // Check if current path matches
+            if (currentPath === href || (href === "/" && currentPath === "/")) {
+              link.classList.add("active");
+            } else if (
+              href === "/projekty" &&
+              currentPath.startsWith("/projekty")
+            ) {
+              link.classList.add("active");
+            }
+          });
+        }
+
+        // Add click feedback to all nav links
+        function addClickFeedback(element) {
+          element.addEventListener("mousedown", () => {
+            element.style.transform = "scale(0.95)";
+            element.style.transition = "transform 0.1s ease-out";
+          });
+
+          element.addEventListener("mouseup", () => {
+            element.style.transform = "";
+          });
+
+          element.addEventListener("mouseleave", () => {
+            element.style.transform = "";
+          });
+        }
+
+        // Apply click feedback to nav links
+        navLinks.forEach((link) => {
+          addClickFeedback(link);
+        });
+
+        // Apply click feedback to contact button
+        if (contactBtn) {
+          addClickFeedback(contactBtn);
+        }
+
+        // Set active link on load
+        setActiveLink();
+      }
+
+      // Initialize on page load
+      initNavigation();
+
+      // Re-initialize after View Transitions
+      document.addEventListener("astro:after-swap", initNavigation);
+      document.addEventListener("astro:page-load", initNavigation);
+    </script>
 
     <script is:inline>
       function initContact() {
