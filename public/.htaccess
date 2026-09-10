@@ -1,9 +1,10 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  RewriteBase /sub/test/
 
-# Pravidlo pre Keystatic SPA v podadresári
+# Ak súbor ani priečinok neexistujú, presmeruj na Keystatic SPA
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^keystatic/.\*$ keystatic/index.html [L]
+RewriteRule ^keystatic(.\*)$ keystatic/index.html [L]
 </IfModule>
