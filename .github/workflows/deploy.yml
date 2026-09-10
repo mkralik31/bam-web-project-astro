@@ -32,6 +32,12 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ./sub/test/
           local-dir: ./dist/
+          protocol: ftps
+          port: 21
+          security: loose
+          timeout: 120000
+          dangerous-clean-slate: false
+          state-name: .ftp-deploy-sync-state.json
           exclude: |
             **/.git*
             **/.git*/**
