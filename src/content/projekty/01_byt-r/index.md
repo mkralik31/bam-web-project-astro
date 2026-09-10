@@ -1,12 +1,12 @@
 ---
-title: "BYT R"
-description: "Hravý rodinný interiér s oranžovými akcentmi a funkčnosťou."
-type: "realizácia"
+title: BYT R
+description: Hravý rodinný interiér s oranžovými akcentmi a funkčnosťou.
+year: '2024'
+type: realizácia
+location: Trnava
 featured: true
-location: "Trnava"
-year: "2024"
+gallery: []
 ---
-
 ### Koncept a realizácia
 
 Projekt Prúdy prináša moderné mestské bývanie v tesnej blízkosti historického centra Trnavy. Návrh spája kuchyňu s chodbou do súdržného celku. Oranžové detaily vnášajú hravosť do rodinného priestoru, kde každý centimeter slúži maximálnemu využitiu.

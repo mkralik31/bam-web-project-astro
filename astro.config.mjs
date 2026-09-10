@@ -1,19 +1,23 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
-import tailwindcss from '@tailwindcss/vite';
-import { loadEnv } from 'vite';
+import { defineConfig } from "astro/config";
+import tailwindcss from "@tailwindcss/vite";
+import { loadEnv } from "vite";
+import sitemap from "@astrojs/sitemap";
+import react from "@astrojs/react";
 
-import sitemap from '@astrojs/sitemap';
-
-const { PUBLIC_SITE_URL } = loadEnv(process.env.NODE_ENV || 'development', process.cwd(), '');
+const { PUBLIC_SITE_URL } = loadEnv(
+  process.env.NODE_ENV || "development",
+  process.cwd(),
+  "",
+);
 
 export default defineConfig({
-  output: 'static',
-  site: PUBLIC_SITE_URL || 'https://atelierbam.sk',
+  output: "static",
+  site: PUBLIC_SITE_URL || "https://atelierbam.sk",
 
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
   },
 
-  integrations: [sitemap()]
+  integrations: [sitemap(), react()],
 });
