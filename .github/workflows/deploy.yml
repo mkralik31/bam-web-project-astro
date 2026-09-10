@@ -27,10 +27,10 @@ jobs:
       - name: Deploy via SFTP
         uses: wlixcc/SFTP-Deploy-Action@v1.2.5
         with:
-          host: ${{ secrets.FTP_SERVER }}
+          server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           port: ${{ secrets.SFTP_PORT || 22 }}
           local_path: './dist/*'
           remote_path: './sub/test/'
-          sftpOnly: true
+          sftp_only: true
