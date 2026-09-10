@@ -1,4 +1,4 @@
-name: Deploy to Hostcreators via FTP
+name: Deploy to Hostcreators via SFTP
 
 on:
   push:
@@ -24,22 +24,13 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Deploy to FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Deploy via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.5
         with:
-          server: ${{ secrets.FTP_SERVER }}
+          host: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ./sub/test/
-          local-dir: ./dist/
-          protocol: ftps
-          port: 21
-          security: loose
-          timeout: 60000
-          dangerous-clean-slate: false
-          state-name: .ftp-deploy-sync-state.json
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/.github/**
-            **/node_modules/**
+          port: ${{ secrets.SFTP_PORT || 22 }}
+          local_path: './dist/*'
+          remote_path: './sub/test/'
+          sftpOnly: true
