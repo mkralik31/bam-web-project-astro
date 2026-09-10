@@ -1,67 +1,36 @@
 ---
-import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Image } from "astro:assets";
+import { render } from "astro:content";
+import { getProjectsAndImages, type ProjectWithImages } from "../../lib/utils";
 
-// getStaticPaths pre dynamické routovanie zložiek
 export async function getStaticPaths() {
-  const projekty = await getCollection("projekty");
-  return projekty.map((projekt) => {
-    const cleanId = projekt.id.replace(/\/index$/, "").replace(/[^a-zA-Z0-9_-]/g, "-");
-
-    return {
-      params: { id: cleanId },
-      props: { projekt },
-    };
-  });
+  const projekty = await getProjectsAndImages();
+  return projekty.map((projekt) => ({
+    params: { id: projekt.cleanId },
+    props: { projekt },
+  }));
 }
 
 interface Props {
-  projekt: CollectionEntry<"projekty">;
+  projekt: ProjectWithImages;
 }
 
 const { projekt } = Astro.props;
 
-// Názov priečinka projektu (napr. "01_byt-r")
-const folderName = projekt.id.replace(/\/index$/, "");
-
-// Načítame všetky obrázky z kolekcie
-const allImagesMap = import.meta.glob<{ default: ImageMetadata }>(
-  "/src/content/projekty/**/*.{jpeg,jpg,png,gif,webp,avif,JPEG,JPG,PNG,GIF,WEBP,AVIF}"
-);
-
-// Nájdeme COVER (súbor priamo v priečinku projektu, ktorý sa volá "cover")
-const coverKey = Object.keys(allImagesMap).find((path) => {
-  const isCorrectFolder = path.includes(`/src/content/projekty/${folderName}/`);
-  const isNotInGallery = !path.includes("/gallery/");
-  const isCoverName = path.toLowerCase().includes("cover");
-  return isCorrectFolder && isNotInGallery && isCoverName;
-});
-
-const coverImage = coverKey ? await allImagesMap[coverKey]() : null;
-
-// Nájdeme VŠETKY fotky v podpriečinku /gallery/
-const galleryKeys = Object.keys(allImagesMap)
-  .filter((path) =>
-    path.includes(`/src/content/projekty/${folderName}/gallery/`)
-  )
-  .sort(); // Abecedné zoradenie
-
-const galleryImages = await Promise.all(
-  galleryKeys.map((key) => allImagesMap[key]())
-);
-
-// Astro render pre Markdown obsah
-const { Content } = await render(projekt);
+// Renderuje textový obsah z Markdownu (všetko pod '---')
+const { Content } = await render(projekt.entry);
+const { data } = projekt.entry;
 ---
 
-<BaseLayout title={`${projekt.data.title} | BAM STUDIO`}>
+<BaseLayout title={`${data.title} | BAM STUDIO`}>
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe.css"
   />
 
   <article class="bg-white min-h-screen pt-32 pb-24">
+    <!-- Hlavička projektu -->
     <header class="max-w-7xl mx-auto px-6 mb-16 md:mb-24">
       <div class="flex flex-col md:flex-row md:items-end justify-between gap-12">
         <div class="max-w-4xl">
@@ -74,41 +43,43 @@ const { Content } = await render(projekt);
           <h1
             class="text-5xl md:text-8xl font-black italic tracking-tighter leading-[0.85] uppercase overflow-visible pr-4 whitespace-nowrap"
           >
-            {projekt.data.title}
+            {data.title}
           </h1>
         </div>
 
+        <!-- Meta údaje (Lokalita, Rok, Typ) -->
         <div class="grid grid-cols-2 gap-y-6 gap-x-4 min-[450px]:flex min-[450px]:gap-12 border-l border-black/5 pl-6 md:pl-12 py-2">
           <div>
             <span class="label-tech text-black/30 block mb-2 text-[10px]">Lokalita</span>
             <span class="text-[11px] font-black uppercase italic tracking-wider block">
-              {projekt.data.location || "SR"}
+              {data.location || "SR"}
             </span>
           </div>
 
           <div>
             <span class="label-tech text-black/30 block mb-2 text-[10px]">Rok</span>
             <span class="text-[11px] font-black italic text-[#0000FF] tracking-wider block">
-              {projekt.data.year || "2026"}
+              {data.year || "2026"}
             </span>
           </div>
 
           <div class="col-span-2 min-[450px]:col-auto">
             <span class="label-tech text-black/30 block mb-2 text-[10px]">BÄM!</span>
             <span class="text-[11px] font-black italic uppercase text-[#0000FF] tracking-wider block">
-              {projekt.data.type}
+              {data.type || "Architektúra"}
             </span>
           </div>
         </div>
       </div>
     </header>
 
+    <!-- Hlavný Cover obrázok -->
     {
-      coverImage && (
+      projekt.coverImg && (
         <div class="mb-12">
           <Image
-            src={coverImage.default}
-            alt={projekt.data.title}
+            src={projekt.coverImg}
+            alt={data.title}
             class="w-full h-auto object-cover"
             loading="eager"
           />
@@ -116,6 +87,7 @@ const { Content } = await render(projekt);
       )
     }
 
+    <!-- Koncept a texty -->
     <div class="max-w-7xl mx-auto px-6 mb-32">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
         <div class="md:col-span-3">
@@ -126,18 +98,22 @@ const { Content } = await render(projekt);
 
         <div class="md:col-span-9">
           <div class="prose prose-lg prose-neutral max-w-3xl prose-p:text-black/70 prose-p:text-xl prose-p:font-light prose-p:leading-[1.8] prose-p:italic">
-            {projekt.data.description && (
-              <p class="text-xl md:text-2xl text-black/80 font-light leading-relaxed italic mb-12">
-                {projekt.data.description}
-              </p>
-            )}
+            {
+              data.description && (
+                <p class="text-xl md:text-2xl text-black/80 font-light leading-relaxed italic mb-12">
+                  {data.description}
+                </p>
+              )
+            }
+            {/* Zobrazí text zapísaný v .md súbore */}
             <Content />
           </div>
         </div>
       </div>
 
+      <!-- Galéria obrázkov zo zložky gallery/ -->
       {
-        galleryImages && galleryImages.length > 0 && (
+        projekt.galleryImgs && projekt.galleryImgs.length > 0 && (
           <div class="mt-24 pt-12 border-t border-black/5">
             <div class="mb-12 flex justify-start">
               <h2 class="label-tech text-[#0000FF]">Galéria</h2>
@@ -147,18 +123,18 @@ const { Content } = await render(projekt);
               id="gallery"
               class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
             >
-              {galleryImages.map((img, index) => (
+              {projekt.galleryImgs.map((img, index) => (
                 <a
-                  href={img.default.src}
-                  data-pswp-width={img.default.width}
-                  data-pswp-height={img.default.height}
+                  href={img.src}
+                  data-pswp-width={img.width}
+                  data-pswp-height={img.height}
                   target="_blank"
                   rel="noreferrer"
                   class="group relative block aspect-square overflow-hidden bg-gray-100 border border-black/5 hover:border-[#0000FF] transition-colors"
                 >
                   <Image
-                    src={img.default}
-                    alt={`${projekt.data.title} - Obrázok ${index + 1}`}
+                    src={img}
+                    alt={`${data.title} - Obrázok ${index + 1}`}
                     class="w-full h-full object-cover grayscale-0 lg:grayscale lg:group-hover:grayscale-0 transition-all duration-700 lg:group-hover:scale-110"
                     widths={[400, 800]}
                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -171,6 +147,7 @@ const { Content } = await render(projekt);
       }
     </div>
 
+    <!-- Patka: Prechod späť do archívu -->
     <footer class="max-w-7xl mx-auto px-6 mt-40 pt-24 border-t border-black">
       <a
         href="/projekty"
@@ -187,6 +164,7 @@ const { Content } = await render(projekt);
     </footer>
   </article>
 
+  <!-- PhotoSwipe Lightbox skript -->
   <script type="module">
     import PhotoSwipeLightbox from "https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe-lightbox.esm.js";
     import PhotoSwipe from "https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe.esm.js";

@@ -2,8 +2,6 @@
 title: "BYT F"
 description: "Elegantný rodinný interiér."
 type: "realizácia"
-coverImage: "./01.jpg"
-gallery: ["./01.jpg", "./02.jpg"]
 featured: true
 location: "Bratislava"
 year: "2023"

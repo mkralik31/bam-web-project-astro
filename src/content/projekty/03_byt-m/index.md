@@ -2,9 +2,6 @@
 title: "BYT M"
 description: "Z 2-izbového na 3-izbový."
 type: "realizácia"
-coverImage: "./01.JPG"
-gallery:
-  ["./01.jpg", "./02.jpg", "./03.jpg", "./04.jpg", "./05.jpg", "./06.jpg"]
 featured: true
 location: "Bratislava"
 year: "2020"

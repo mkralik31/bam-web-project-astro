@@ -1,25 +1,23 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { getCollection, type CollectionEntry } from "astro:content";
 import { Image } from "astro:assets";
 import Logo from "../components/Logo.astro";
+import { getProjectsAndImages } from "../lib/utils";
 
-// 1. Načítanie a filtrovanie projektov (len featured: true)
-const vsetkyProjekty = await getCollection("projekty");
+// 1. Načítame kompletne spracované projekty aj s obrázkami z disku
+const vsetkyProjekty = await getProjectsAndImages();
 
 // Zoradíme podľa nastaveného order (alebo roka ako fallback)
-const zoradeneProjekty = [...vsetkyProjekty].sort(
-  (a: CollectionEntry<"projekty">, b: CollectionEntry<"projekty">) => {
-    const orderA = a.data.order ?? 99;
-    const orderB = b.data.order ?? 99;
-    if (orderA !== orderB) return orderA - orderB;
-    return Number(b.data.year || 0) - Number(a.data.year || 0);
-  }
-);
+const zoradeneProjekty = [...vsetkyProjekty].sort((a, b) => {
+  const orderA = a.entry.data.order ?? 99;
+  const orderB = b.entry.data.order ?? 99;
+  if (orderA !== orderB) return orderA - orderB;
+  return Number(b.entry.data.year || 0) - Number(a.entry.data.year || 0);
+});
 
 // Projekty vybrané na Homepage (max 6)
 const zobrazeneProjekty = zoradeneProjekty
-  .filter((p) => p.data.featured !== false)
+  .filter((p) => p.entry.data.featured !== false)
   .slice(0, 6);
 
 // Hero projekt je prvý z vybraných (fallback na prvý v celom archíve)
@@ -32,11 +30,11 @@ const heroProjekt = zobrazeneProjekty[0] || vsetkyProjekty[0];
   >
     <div class="absolute inset-0 opacity-40">
       {
-        heroProjekt && (
+        heroProjekt?.coverImg && (
           <Image
-            src={heroProjekt.data.coverImage}
+            src={heroProjekt.coverImg}
             class="w-full h-full object-cover scale-105"
-            alt="Hero background"
+            alt={heroProjekt.entry.data.title || "Hero background"}
             loading="eager"
           />
         )
@@ -72,46 +70,55 @@ const heroProjekt = zobrazeneProjekty[0] || vsetkyProjekty[0];
 
     <div class="flex flex-col bg-white py-12 md:py-24">
       {
-        zobrazeneProjekty.map((projekt, index) => (
-          <section class="projekt-card mb-12 md:mb-24 px-6">
-            <a
-              href={`/projekty/${projekt.id}`}
-              class="block no-underline group max-w-6xl mx-auto border-b border-black/10 pb-12 md:pb-24"
-            >
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                <div
-                  class={`flex flex-col justify-center ${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}
-                >
-                  <div class="mb-6">
-                    <h3
-                      class="text-4xl sm:text-5xl lg:text-6xl font-black italic tracking-widest leading-[0.9] uppercase 
+        zobrazeneProjekty.map((projekt, index) => {
+          const { data } = projekt.entry;
+          return (
+            <section class="projekt-card mb-12 md:mb-24 px-6">
+              <a
+                href={`/projekty/${projekt.cleanId}`}
+                class="block no-underline group max-w-6xl mx-auto border-b border-black/10 pb-12 md:pb-24"
+              >
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                  <div
+                    class={`flex flex-col justify-center ${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}
+                  >
+                    <div class="mb-6">
+                      <h3
+                        class="text-4xl sm:text-5xl lg:text-6xl font-black italic tracking-widest leading-[0.9] uppercase 
             text-[#0000FF] 
             lg:text-black lg:group-hover:text-[#0000FF] 
             transition-colors duration-300"
-                    >
-                      {projekt.data.title}
-                    </h3>
+                      >
+                        {data.title}
+                      </h3>
+                    </div>
+                    <p class="text-black/60 font-light italic text-lg max-w-sm">
+                      {data.type || "Architektúra"}, {data.year || "2026"},{" "}
+                      {data.location || "SR"}
+                    </p>
                   </div>
-                  <p class="text-black/60 font-light italic text-lg max-w-sm">
-                    {projekt.data.type}, {projekt.data.year},{" "}
-                    {projekt.data.location}
-                  </p>
-                </div>
 
-                <div
-                  class={`relative overflow-hidden aspect-[4/3] bg-gray-50 ${index % 2 === 0 ? "md:order-2" : "md:order-1"}`}
-                >
-                  <Image
-                    src={projekt.data.coverImage}
-                    alt={projekt.data.title}
-                    width={900}
-                    class="w-full h-full object-cover grayscale-0 lg:grayscale lg:group-hover:grayscale-0 lg:group-hover:scale-105 transition-all duration-[1.5s] ease-out"
-                  />
+                  <div
+                    class={`relative overflow-hidden aspect-[4/3] bg-gray-50 ${index % 2 === 0 ? "md:order-2" : "md:order-1"}`}
+                  >
+                    {projekt.coverImg ? (
+                      <Image
+                        src={projekt.coverImg}
+                        alt={data.title}
+                        width={900}
+                        class="w-full h-full object-cover grayscale-0 lg:grayscale lg:group-hover:grayscale-0 lg:group-hover:scale-105 transition-all duration-[1.5s] ease-out"
+                      />
+                    ) : (
+                      <div class="w-full h-full flex items-center justify-center text-xs text-black/30 font-mono">
+                        Chýba cover.jpg
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </a>
-          </section>
-        ))
+              </a>
+            </section>
+          );
+        })
       }
     </div>
   </div>

@@ -2,8 +2,6 @@
 title: "BYT R"
 description: "Hravý rodinný interiér s oranžovými akcentmi a funkčnosťou."
 type: "realizácia"
-coverImage: "./02.jpg"
-gallery: ["./01.jpg", "./02.jpg"]
 featured: true
 location: "Trnava"
 year: "2024"
