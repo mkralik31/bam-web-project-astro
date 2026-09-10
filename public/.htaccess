@@ -1,0 +1,9 @@
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+# Pravidlo pre Keystatic SPA v podadresári
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^keystatic/.\*$ keystatic/index.html [L]
+</IfModule>
