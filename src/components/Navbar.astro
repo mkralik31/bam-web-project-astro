@@ -1,0 +1,112 @@
+---
+---
+
+<nav class="fixed top-8 left-1/2 -translate-x-1/2 z-[100] w-[95%] max-w-fit">
+  <div
+    class="bg-white/90 backdrop-blur-xl border border-black/5 px-6 py-3 min-[400px]:px-10 min-[400px]:py-4 rounded-full shadow-[0_20px_40px_rgba(0,0,0,0.08)] flex gap-4 min-[400px]:gap-10 items-center justify-center"
+  >
+    <!-- Domov -->
+    <a
+      href="/"
+      class="nav-link group relative flex flex-col items-center no-underline transition-all duration-300 hover:-translate-y-0.5 hover:scale-105"
+    >
+      <span
+        class="text-[10px] font-black italic uppercase tracking-[0.2em] min-[400px]:tracking-[0.4em] text-[#0000FF]"
+      >
+        Domov
+      </span>
+      <div
+        class="dot absolute -bottom-2 w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bottom-[-10px] group-[.active]:opacity-100 group-[.active]:bottom-[-10px]"
+      >
+      </div>
+    </a>
+
+    <!-- Projekty -->
+    <a
+      href="/projekty"
+      class="nav-link group relative flex flex-col items-center no-underline transition-all duration-300 hover:-translate-y-0.5 hover:scale-105"
+    >
+      <span
+        class="text-[10px] font-black italic uppercase tracking-[0.2em] min-[400px]:tracking-[0.4em] text-[#0000FF]"
+      >
+        Projekty
+      </span>
+      <div
+        class="dot absolute -bottom-2 w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bottom-[-10px] group-[.active]:opacity-100 group-[.active]:bottom-[-10px]"
+      >
+      </div>
+    </a>
+
+    <!-- Kontakt -->
+    <button
+      id="open-contact"
+      data-open-contact
+      type="button"
+      aria-label="Otvoriť kontaktný formulár"
+      class="group relative flex flex-col items-center bg-transparent border-none p-0 cursor-pointer outline-none transition-all duration-300 hover:-translate-y-0.5 hover:scale-105"
+    >
+      <span
+        class="text-[10px] font-black italic uppercase tracking-[0.2em] min-[400px]:tracking-[0.4em] text-[#0000FF]"
+      >
+        Kontakt
+      </span>
+      <div
+        class="dot absolute -bottom-2 w-1 h-1 bg-[#0000FF] rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:bottom-[-10px]"
+      >
+      </div>
+    </button>
+  </div>
+</nav>
+
+<script>
+  function initNavigation() {
+    const navLinks = document.querySelectorAll<HTMLAnchorElement>(".nav-link");
+    const contactBtn = document.getElementById("open-contact");
+
+    // Nastavenie aktívnej trasy
+    function setActiveLink() {
+      const currentPath = window.location.pathname;
+
+      navLinks.forEach((link) => {
+        const href = link.getAttribute("href");
+        link.classList.remove("active");
+
+        if (href === "/" && currentPath === "/") {
+          link.classList.add("active");
+        } else if (
+          href === "/projekty" &&
+          currentPath.startsWith("/projekty")
+        ) {
+          link.classList.add("active");
+        }
+      });
+    }
+
+    // Odzrkadlenie kliknutia (skratené cez CSS alebo spravované Listenermi)
+    function addClickFeedback(element: HTMLElement) {
+      if (element.dataset.hasFeedback) return;
+      element.dataset.hasFeedback = "true";
+
+      element.addEventListener("mousedown", () => {
+        element.style.transform = "scale(0.95)";
+        element.style.transition = "transform 0.1s ease-out";
+      });
+
+      const resetTransform = () => {
+        element.style.transform = "";
+      };
+
+      element.addEventListener("mouseup", resetTransform);
+      element.addEventListener("mouseleave", resetTransform);
+    }
+
+    navLinks.forEach(addClickFeedback);
+    if (contactBtn) addClickFeedback(contactBtn);
+
+    setActiveLink();
+  }
+
+  initNavigation();
+  document.addEventListener("astro:after-swap", initNavigation);
+  document.addEventListener("astro:page-load", initNavigation);
+</script>

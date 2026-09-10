@@ -1,68 +1,61 @@
 ---
-import { getCollection, type CollectionEntry } from "astro:content";
+import { getCollection, render, type CollectionEntry } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { Image } from "astro:assets";
 
-// getStaticPaths
+// getStaticPaths pre dynamické routovanie zložiek
 export async function getStaticPaths() {
   const projekty = await getCollection("projekty");
-  return projekty.map((projekt: CollectionEntry<"projekty">) => ({
-    params: { id: projekt.id },
-    props: { projekt },
-  }));
+  return projekty.map((projekt) => {
+    const cleanId = projekt.id.replace(/\/index$/, "").replace(/[^a-zA-Z0-9_-]/g, "-");
+
+    return {
+      params: { id: cleanId },
+      props: { projekt },
+    };
+  });
 }
 
-// Props definicia
 interface Props {
   projekt: CollectionEntry<"projekty">;
 }
 
 const { projekt } = Astro.props;
 
-// Parsuj md obsah do textu a galerie obrazkov
-const rawBody = projekt.body || "";
+// Názov priečinka projektu (napr. "01_byt-r")
+const folderName = projekt.id.replace(/\/index$/, "");
 
-// Text obsah - vsetko okrem [gallery]
-const textContent = rawBody.split("[gallery]")[0].trim();
+// Načítame všetky obrázky z kolekcie
+const allImagesMap = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/content/projekty/**/*.{jpeg,jpg,png,gif,webp,avif,JPEG,JPG,PNG,GIF,WEBP,AVIF}"
+);
 
-// Cesty k obrazkom v galerii
-const galleryMatch = rawBody.match(/\[gallery\]([\s\S]*?)\[\/gallery\]/);
-const galleryImages: string[] = [];
-
-if (galleryMatch) {
-  const galleryContent = galleryMatch[1];
-  const imagePaths = galleryContent
-    .split("\n")
-    .map((line: string) => line.trim())
-    .filter(
-      (line: string) =>
-        line &&
-        (line.endsWith(".jpg") ||
-          line.endsWith(".JPG") ||
-          line.endsWith(".png") ||
-          line.endsWith(".webp")),
-    );
-
-  galleryImages.push(...imagePaths);
-}
-
-// Import obrazkov dynamicke
-const images = import.meta.glob("../../assets/*.{jpg,JPG,jpeg,png,webp}", {
-  eager: true,
+// Nájdeme COVER (súbor priamo v priečinku projektu, ktorý sa volá "cover")
+const coverKey = Object.keys(allImagesMap).find((path) => {
+  const isCorrectFolder = path.includes(`/src/content/projekty/${folderName}/`);
+  const isNotInGallery = !path.includes("/gallery/");
+  const isCoverName = path.toLowerCase().includes("cover");
+  return isCorrectFolder && isNotInGallery && isCoverName;
 });
 
-// Mapping cist obrazkov
-const galleryImports = galleryImages
-  .map((path) => {
-    const cleanPath = path.replace("../../assets/", "");
-    const fullPath = `../../assets/${cleanPath}`;
-    return images[fullPath];
-  })
-  .filter(Boolean);
+const coverImage = coverKey ? await allImagesMap[coverKey]() : null;
+
+// Nájdeme VŠETKY fotky v podpriečinku /gallery/
+const galleryKeys = Object.keys(allImagesMap)
+  .filter((path) =>
+    path.includes(`/src/content/projekty/${folderName}/gallery/`)
+  )
+  .sort(); // Abecedné zoradenie
+
+const galleryImages = await Promise.all(
+  galleryKeys.map((key) => allImagesMap[key]())
+);
+
+// Astro render pre Markdown obsah
+const { Content } = await render(projekt);
 ---
 
 <BaseLayout title={`${projekt.data.title} | BAM STUDIO`}>
-  <!-- PhotoSwipe CSS -->
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe.css"
@@ -70,9 +63,7 @@ const galleryImports = galleryImages
 
   <article class="bg-white min-h-screen pt-32 pb-24">
     <header class="max-w-7xl mx-auto px-6 mb-16 md:mb-24">
-      <div
-        class="flex flex-col md:flex-row md:items-end justify-between gap-12"
-      >
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-12">
         <div class="max-w-4xl">
           <a
             href="/projekty"
@@ -87,38 +78,24 @@ const galleryImports = galleryImages
           </h1>
         </div>
 
-        <div
-          class="grid grid-cols-2 gap-y-6 gap-x-4 min-[450px]:flex min-[450px]:gap-12 border-l border-black/5 pl-6 md:pl-12 py-2"
-        >
+        <div class="grid grid-cols-2 gap-y-6 gap-x-4 min-[450px]:flex min-[450px]:gap-12 border-l border-black/5 pl-6 md:pl-12 py-2">
           <div>
-            <span class="label-tech text-black/30 block mb-2 text-[10px]"
-              >Lokalita</span
-            >
-            <span
-              class="text-[11px] font-black uppercase italic tracking-wider block"
-            >
+            <span class="label-tech text-black/30 block mb-2 text-[10px]">Lokalita</span>
+            <span class="text-[11px] font-black uppercase italic tracking-wider block">
               {projekt.data.location || "SR"}
             </span>
           </div>
 
           <div>
-            <span class="label-tech text-black/30 block mb-2 text-[10px]"
-              >Rok</span
-            >
-            <span
-              class="text-[11px] font-black italic text-[#0000FF] tracking-wider block"
-            >
+            <span class="label-tech text-black/30 block mb-2 text-[10px]">Rok</span>
+            <span class="text-[11px] font-black italic text-[#0000FF] tracking-wider block">
               {projekt.data.year || "2026"}
             </span>
           </div>
 
           <div class="col-span-2 min-[450px]:col-auto">
-            <span class="label-tech text-black/30 block mb-2 text-[10px]"
-              >BÄM!</span
-            >
-            <span
-              class="text-[11px] font-black italic uppercase text-[#0000FF] tracking-wider block"
-            >
+            <span class="label-tech text-black/30 block mb-2 text-[10px]">BÄM!</span>
+            <span class="text-[11px] font-black italic uppercase text-[#0000FF] tracking-wider block">
               {projekt.data.type}
             </span>
           </div>
@@ -126,44 +103,41 @@ const galleryImports = galleryImages
       </div>
     </header>
 
-    <div
-      class="w-full h-[60vh] md:h-[85vh] overflow-hidden bg-gray-100 mb-16 md:mb-24 border-y border-black"
-    >
-      <Image
-        src={projekt.data.coverImage}
-        alt={projekt.data.title}
-        class="w-full h-full object-contain transition-all duration-[1.5s] ease-in-out
-         grayscale-0
-         lg:grayscale lg:hover:grayscale-0 lg:hover:scale-105"
-      />
-    </div>
+    {
+      coverImage && (
+        <div class="mb-12">
+          <Image
+            src={coverImage.default}
+            alt={projekt.data.title}
+            class="w-full h-auto object-cover"
+            loading="eager"
+          />
+        </div>
+      )
+    }
 
     <div class="max-w-7xl mx-auto px-6 mb-32">
       <div class="grid grid-cols-1 md:grid-cols-12 gap-12">
-        <!-- <div class="md:col-span-3">
+        <div class="md:col-span-3">
           <div class="sticky top-32">
             <h2 class="label-tech text-[#0000FF] mb-8">Koncept</h2>
           </div>
-        </div> -->
+        </div>
 
-        <!-- <div class="md:col-span-9">
-          <div
-            class="prose prose-lg prose-neutral max-w-3xl
-            prose-p:text-black/70 prose-p:text-xl prose-p:font-light prose-p:leading-[1.8] prose-p:italic
-            prose-headings:hidden"
-          >
-            <p
-              class="text-xl md:text-2xl text-black/80 font-light leading-relaxed italic mb-12"
-            >
-              {projekt.data.description}
-            </p>
-            <div set:html={textContent.replace(/###[^\n]*\n/g, "")} />
+        <div class="md:col-span-9">
+          <div class="prose prose-lg prose-neutral max-w-3xl prose-p:text-black/70 prose-p:text-xl prose-p:font-light prose-p:leading-[1.8] prose-p:italic">
+            {projekt.data.description && (
+              <p class="text-xl md:text-2xl text-black/80 font-light leading-relaxed italic mb-12">
+                {projekt.data.description}
+              </p>
+            )}
+            <Content />
           </div>
-        </div> -->
+        </div>
       </div>
 
       {
-        galleryImports.length > 0 && (
+        galleryImages && galleryImages.length > 0 && (
           <div class="mt-24 pt-12 border-t border-black/5">
             <div class="mb-12 flex justify-start">
               <h2 class="label-tech text-[#0000FF]">Galéria</h2>
@@ -173,7 +147,7 @@ const galleryImports = galleryImages
               id="gallery"
               class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
             >
-              {galleryImports.map((img: any, index: number) => (
+              {galleryImages.map((img, index) => (
                 <a
                   href={img.default.src}
                   data-pswp-width={img.default.width}
@@ -185,7 +159,7 @@ const galleryImports = galleryImages
                   <Image
                     src={img.default}
                     alt={`${projekt.data.title} - Obrázok ${index + 1}`}
-                    class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                    class="w-full h-full object-cover grayscale-0 lg:grayscale lg:group-hover:grayscale-0 transition-all duration-700 lg:group-hover:scale-110"
                     widths={[400, 800]}
                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   />
@@ -202,61 +176,51 @@ const galleryImports = galleryImages
         href="/projekty"
         class="group flex flex-col items-center text-center no-underline text-black"
       >
-        <span
-          class="label-tech mb-6 opacity-40 group-hover:opacity-100 transition-opacity"
-        >
+        <span class="label-tech mb-6 opacity-40 group-hover:opacity-100 transition-opacity">
           Nasledujúci prieskum
         </span>
-        <span
-          class="text-4xl md:text-8xl font-black italic uppercase tracking-tighter leading-none group-hover:text-[#0000FF] transition-all overflow-visible pr-4"
-        >
+        <span class="text-4xl md:text-8xl font-black italic uppercase tracking-tighter leading-none group-hover:text-[#0000FF] transition-all overflow-visible pr-4">
           Späť do archívu
-          <span
-            class="inline-block transition-transform group-hover:translate-x-6"
-            >→</span
-          >
+          <span class="inline-block transition-transform group-hover:translate-x-6">→</span>
         </span>
       </a>
     </footer>
   </article>
 
-  <!-- PhotoSwipe JS -->
   <script type="module">
     import PhotoSwipeLightbox from "https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe-lightbox.esm.js";
     import PhotoSwipe from "https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe.esm.js";
 
-    const lightbox = new PhotoSwipeLightbox({
-      gallery: "#gallery",
-      children: "a",
-      pswpModule: PhotoSwipe,
+    function initPhotoSwipe() {
+      const lightbox = new PhotoSwipeLightbox({
+        gallery: "#gallery",
+        children: "a",
+        pswpModule: PhotoSwipe,
+        spacing: 0.05,
+        allowPanToNext: true,
+        closeTitle: "Zavrieť",
+        zoomTitle: "Priblížiť",
+        arrowPrevTitle: "Predchádzajúci",
+        arrowNextTitle: "Nasledujúci",
+      });
 
-      // UI custom
-      spacing: 0.05,
-      allowPanToNext: true,
+      lightbox.init();
+    }
 
-      // Minimal UI
-      closeTitle: "Zavrieť",
-      zoomTitle: "Priblížiť",
-      arrowPrevTitle: "Predchádzajúci",
-      arrowNextTitle: "Nasledujúci",
-    });
-
-    lightbox.init();
+    initPhotoSwipe();
+    document.addEventListener("astro:page-load", initPhotoSwipe);
   </script>
 </BaseLayout>
 
 <style is:global>
-  /* PhotoSwipe custom */
   .pswp {
     --pswp-bg: #000000;
     --pswp-icon-color: #ffffff;
     --pswp-icon-color-secondary: #0000ff;
   }
-
   .pswp__button {
     transition: all 0.3s ease;
   }
-
   .pswp__button:hover {
     background: rgba(0, 0, 255, 0.1) !important;
   }

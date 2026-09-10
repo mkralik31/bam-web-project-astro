@@ -3,12 +3,36 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { Image } from "astro:assets";
 
-// Ziskanie kolekcie s typovanim
-const projekty = await getCollection("projekty");
+// Získanie kolekcie
+const vsetkyProjekty = await getCollection("projekty");
 
-const zoradeneProjekty: CollectionEntry<"projekty">[] = [...projekty].sort(
-  (a: CollectionEntry<"projekty">, b: CollectionEntry<"projekty">) =>
-    parseInt(b.data.year || "0") - parseInt(a.data.year || "0"),
+const allImagesMap = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/content/projekty/**/*.{jpeg,jpg,png,gif,webp,avif, JPEG,JPG,PNG,GIF,WEBP,AVIF}"
+);
+
+const projekty = await Promise.all(
+  vsetkyProjekty.map(async (projekt) => {
+    // Vyčistíme ID pre URL trasu aj zložku
+    const folderName = projekt.id.replace(/\/index$/, "");
+    const cleanId = folderName.replace(/[^a-zA-Z0-9_-]/g, "-");
+    
+    // Nájdeme cover obrázok
+    const coverKey = Object.keys(allImagesMap).find((path) => {
+      return (
+        path.includes(`/src/content/projekty/${folderName}/`) &&
+        !path.includes("/gallery/") &&
+        path.toLowerCase().includes("cover")
+      );
+    });
+
+    const coverObj = coverKey ? await allImagesMap[coverKey]() : null;
+
+    return {
+      ...projekt,
+      cleanId, // Vyčistené ID pre href
+      coverImg: coverObj?.default,
+    };
+  })
 );
 ---
 
@@ -29,17 +53,23 @@ const zoradeneProjekty: CollectionEntry<"projekty">[] = [...projekty].sort(
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-32">
         {
-          zoradeneProjekty.map((projekt) => (
+          projekty.map((projekt) => (
             <a
-              href={`/projekty/${projekt.id}`}
+              href={`/projekty/${projekt.cleanId}`}
               class="group block relative no-underline text-black"
             >
-              <div class="overflow-hidden bg-gray-50 aspect-[16/10] mb-8 border border-black/5 flex items-center justify-center p-4">
-                <Image
-                  src={projekt.data.coverImage}
-                  alt={projekt.data.title}
-                  class="w-full h-full object-contain transition-all duration-[1.5s] ease-in-out grayscale-0 scale-100 lg:grayscale lg:group-hover:grayscale-0 lg:group-hover:scale-105"
-                />
+              <div class="overflow-hidden bg-gray-50 aspect-[16/10] mb-8 border border-black/5">
+                {projekt.coverImg ? (
+                  <Image
+                    src={projekt.coverImg}
+                    alt={projekt.data.title}
+                    class="w-full h-full object-cover transition-all duration-[1.5s] ease-in-out grayscale-0 scale-100 lg:grayscale lg:group-hover:grayscale-0 lg:group-hover:scale-105"
+                  />
+                ) : (
+                  <div class="w-full h-full flex items-center justify-center text-xs text-black/30 font-mono uppercase">
+                    Chýba cover image
+                  </div>
+                )}
               </div>
               <div class="flex justify-between items-end">
                 <div class="flex-1">
