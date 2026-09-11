@@ -7,6 +7,9 @@ export const getStaticPaths = () => {
   return [
     { params: { file: undefined } },
     { params: { file: 'keystatic' } },
+    // Pridanie explicitných trás pre Keystatic Cloud OAuth callback
+    { params: { file: 'cloud/oauth/callback' } },
+    { params: { file: 'cloud/oauth/created-organization' } },
   ];
 };
 ---
