@@ -1,5 +1,5 @@
 ---
-import { makePage } from '@keystatic/astro/ui';
+import { makeHandler } from '@keystatic/astro/api';
 import config from '../../../keystatic.config';
 
 export const prerender = true;
@@ -11,7 +11,5 @@ export const getStaticPaths = () => {
   ];
 };
 
-const Keystatic = makePage(config);
+export const ALL = makeHandler({ config });
 ---
-
-<Keystatic client:only="react" />
