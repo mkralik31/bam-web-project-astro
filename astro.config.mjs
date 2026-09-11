@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import { loadEnv } from "vite";
 import sitemap from "@astrojs/sitemap";
 import react from "@astrojs/react";
+import keystatic from "@keystatic/astro";
 
 const { PUBLIC_SITE_URL } = loadEnv(
   process.env.NODE_ENV || "development",
@@ -13,7 +14,8 @@ const { PUBLIC_SITE_URL } = loadEnv(
 
 export default defineConfig({
   output: "static",
-  site: PUBLIC_SITE_URL || "https://atelierbam.sk",
+  site: PUBLIC_SITE_URL || "https://test.atelierbam.sk",
+  base: "/sub/test/",
 
   vite: {
     plugins: [tailwindcss()],
