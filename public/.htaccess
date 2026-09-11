@@ -2,9 +2,9 @@
   RewriteEngine On
   RewriteBase /
 
-# Ak súbor ani priečinok neexistujú, presmeruj na Keystatic SPA
+# Prehravanie OAuth callbacku a podciest Keystaticu na hlavny index.html dashboardu
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^keystatic(.\*)$ keystatic/index.html [L]
+RewriteRule ^keystatic(/.\*)?$ keystatic/index.html [L]
 </IfModule>
