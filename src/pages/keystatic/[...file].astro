@@ -1,6 +1,5 @@
 ---
-import { makePage } from '@keystatic/astro/ui';
-import config from '../../../keystatic.config';
+import KeystaticApp from '../../components/KeystaticApp';
 
 export const prerender = true;
 
@@ -10,8 +9,6 @@ export const getStaticPaths = () => {
     { params: { file: 'keystatic' } },
   ];
 };
-
-const KeystaticClient = makePage(config);
 ---
 
 <!DOCTYPE html>
@@ -22,6 +19,6 @@ const KeystaticClient = makePage(config);
     <title>Keystatic Admin</title>
   </head>
   <body>
-    <KeystaticClient client:only="react" />
+    <KeystaticApp client:only="react" />
   </body>
 </html>
