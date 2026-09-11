@@ -1,5 +1,4 @@
 ---
-// src/components/Hero.astro
 import { Image } from "astro:assets";
 import Logo from "./Logo.astro";
 import type { ProjectWithImages } from "../lib/utils";
@@ -18,16 +17,18 @@ const { project, showScroll = true, showLogo = true } = Astro.props;
 >
   {/* Pozadie s obrázkom */}
   <div class="absolute inset-0 opacity-40">
-    {project?.coverImg && (
-      <a href={`/projekty/${project.cleanId}`} class="block w-full h-full">
-        <Image
-          src={project.coverImg}
-          alt={project.entry.data.title}
-          format="webp"
-          class="w-full h-full object-cover"
-        />
-      </a>
-    )}
+    {
+      project && project.heroImg && (
+        <a href={`/projekty/${project.cleanId}`} class="block w-full h-full">
+          <Image
+            src={project.heroImg}
+            alt={project.entry.data.title}
+            format="webp"
+            class="w-full h-full object-cover"
+          />
+        </a>
+      )
+    }
   </div>
 
   {/* Stredový obsah - custom slot alebo defaultné Logo */}

@@ -4,6 +4,7 @@ export interface ProjectWithImages {
   entry: CollectionEntry<"projekty">;
   cleanId: string;
   coverImg: ImageMetadata | null;
+  heroImg: ImageMetadata | null;
   galleryImgs: ImageMetadata[];
 }
 
@@ -41,6 +42,13 @@ export async function getProjectsAndImages(): Promise<ProjectWithImages[]> {
         );
       });
 
+      // Špeciálny Hero obrázok (mimo gallery/, začína na hero.)
+      const heroKey = projectImages.find((path) => {
+        const pathLower = path.toLowerCase();
+        const fileName = pathLower.split("/").pop() || "";
+        return !pathLower.includes("/gallery/") && fileName.startsWith("hero.");
+      });
+
       // Galéria
       const galleryKeys = projectImages
         .filter((path) => path.toLowerCase().includes("/gallery/"))
@@ -50,6 +58,12 @@ export async function getProjectsAndImages(): Promise<ProjectWithImages[]> {
       if (coverKey && allImagesMap[coverKey]) {
         const mod = await allImagesMap[coverKey]();
         coverImg = mod.default;
+      }
+
+      let heroImg: ImageMetadata | null = null;
+      if (heroKey && allImagesMap[heroKey]) {
+        const mod = await allImagesMap[heroKey]();
+        heroImg = mod.default;
       }
 
       const galleryImgs: ImageMetadata[] = [];
@@ -64,6 +78,7 @@ export async function getProjectsAndImages(): Promise<ProjectWithImages[]> {
         entry,
         cleanId,
         coverImg,
+        heroImg: heroImg || coverImg,
         galleryImgs,
       };
     }),
@@ -74,18 +89,25 @@ export async function getProjectsAndImages(): Promise<ProjectWithImages[]> {
     const orderA =
       a.entry.data.order !== null && a.entry.data.order !== undefined
         ? Number(a.entry.data.order)
-        : 99;
+        : 999;
     const orderB =
       b.entry.data.order !== null && b.entry.data.order !== undefined
         ? Number(b.entry.data.order)
-        : 99;
+        : 999;
 
+    // 1. Zoradenie podľa zadaného poradia (1, 2, 3...)
     if (orderA !== orderB) {
       return orderA - orderB;
     }
 
-    const yearA = Number(a.entry.data.year || 0);
-    const yearB = Number(b.entry.data.year || 0);
+    // 2. Bezpečné načítanie prvej štvorčíslice z roka (napr. z "2024" alebo "2023-2024")
+    const parseYear = (val: unknown) => {
+      const match = String(val || "").match(/\d{4}/);
+      return match ? parseInt(match[0], 10) : 0;
+    };
+
+    const yearA = parseYear(a.entry.data.year);
+    const yearB = parseYear(b.entry.data.year);
 
     return yearB - yearA;
   });

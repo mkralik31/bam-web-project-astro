@@ -10,7 +10,7 @@ const projektyCollection = defineCollection({
       year: z.union([z.string(), z.number()]).optional().default("2026"),
       type: z.string().optional().default("Architektúra"),
       location: z.string().optional().default("SR"),
-      order: z.number().optional().default(99),
+      order: z.number().optional().nullable(),
       featured: z.boolean().optional().default(true),
     })
     .passthrough(),

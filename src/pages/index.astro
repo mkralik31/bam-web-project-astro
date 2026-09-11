@@ -11,7 +11,7 @@ const featuredProjects = sortedProjects
   .filter((item) => item.entry.data.featured !== false)
   .slice(0, 6);
 
-const hero = featuredProjects[0];
+const hero = sortedProjects.find((item) => item.entry.data.isHero) || sortedProjects[0];
 ---
 
 <BaseLayout title="Domov | BÄM!">

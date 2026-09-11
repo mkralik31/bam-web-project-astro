@@ -27,6 +27,14 @@ export default config({
         title: fields.slug({
           name: { label: "Názov zložky (Slug)" },
         }),
+        order: fields.number({
+          label: "Poradie (Order)",
+          description:
+            "Číslo pre manuálne určenie poradia (1 = prvý projekt, 2 = druhý...). Ak zostane prázdne, projekty sa zoraďujú podľa roku.",
+          validation: {
+            isRequired: false,
+          },
+        }),
         description: fields.text({
           label: "Krátky popis (Description)",
           multiline: true,
@@ -70,6 +78,18 @@ export default config({
         content: fields.markdoc({
           label: "Popis projektu (Markdown)",
           extension: "md",
+        }),
+        isHero: fields.checkbox({
+          label: "Použiť tento projekt ako Hero na titulke",
+          defaultValue: false,
+        }),
+
+        heroImage: fields.image({
+          label: "Vlastný Hero obrázok (voliteľné)",
+          description:
+            "Nahraj alebo vyber konkrétny obrázok pre Hero. Ak zostane prázdne, použije sa titulný cover obrázok.",
+          directory: "src/content/projekty",
+          publicPath: "../../content/projekty/",
         }),
       },
     }),
