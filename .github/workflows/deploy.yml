@@ -35,6 +35,8 @@ jobs:
           protocol: ftps
           port: 21
           security: loose
+          security-options: '{"rejectUnauthorized": false}'
+          passive: true
           timeout: 120000
           dangerous-clean-slate: false
           state-name: .ftp-deploy-sync-state.json
