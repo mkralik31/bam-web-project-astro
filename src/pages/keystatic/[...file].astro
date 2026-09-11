@@ -7,7 +7,6 @@ export const getStaticPaths = () => {
   return [
     { params: { file: undefined } },
     { params: { file: 'keystatic' } },
-    // Pridanie explicitných trás pre Keystatic Cloud OAuth callback
     { params: { file: 'cloud/oauth/callback' } },
     { params: { file: 'cloud/oauth/created-organization' } },
   ];
@@ -20,6 +19,14 @@ export const getStaticPaths = () => {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Keystatic Admin</title>
+    
+    <!-- Fix pre Nginx: Odstránenie koncovej lomky, aby React Router našiel trasu -->
+    <script>
+      if (window.location.pathname.endsWith('/')) {
+        var cleanUrl = window.location.pathname.replace(/\/$/, '') + window.location.search + window.location.hash;
+        window.history.replaceState(null, '', cleanUrl);
+      }
+    </script>
   </head>
   <body>
     <KeystaticApp client:only="react" />
