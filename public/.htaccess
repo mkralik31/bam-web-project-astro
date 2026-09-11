@@ -1,6 +1,6 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /sub/test/
+  RewriteBase /
 
 # Ak súbor ani priečinok neexistujú, presmeruj na Keystatic SPA
 

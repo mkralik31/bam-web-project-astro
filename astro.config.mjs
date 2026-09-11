@@ -15,7 +15,6 @@ const { PUBLIC_SITE_URL } = loadEnv(
 export default defineConfig({
   output: "static",
   site: PUBLIC_SITE_URL || "https://test.atelierbam.sk",
-  base: "/sub/test/",
 
   vite: {
     plugins: [tailwindcss()],
