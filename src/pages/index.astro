@@ -1,65 +1,21 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { Image } from "astro:assets";
-import Logo from "../components/Logo.astro";
 import { getProjectsAndImages } from "../lib/utils";
+import Hero from "../components/Hero.astro";
+import FeaturedProjectsList from "../components/FeaturedProjectsList.astro";
+import Footer from "../components/Footer.astro";
 
-// 1. Načítame kompletne spracované projekty aj s obrázkami z disku
-const vsetkyProjekty = await getProjectsAndImages();
+const sortedProjects = await getProjectsAndImages();
 
-// Zoradíme podľa nastaveného order (alebo roka ako fallback)
-const zoradeneProjekty = [...vsetkyProjekty].sort((a, b) => {
-  const orderA = a.entry.data.order ?? 99;
-  const orderB = b.entry.data.order ?? 99;
-  if (orderA !== orderB) return orderA - orderB;
-  return Number(b.entry.data.year || 0) - Number(a.entry.data.year || 0);
-});
-
-// Projekty vybrané na Homepage (max 6)
-const zobrazeneProjekty = zoradeneProjekty
-  .filter((p) => p.entry.data.featured !== false)
+const featuredProjects = sortedProjects
+  .filter((item) => item.entry.data.featured !== false)
   .slice(0, 6);
 
-// Hero projekt je prvý z vybraných (fallback na prvý v celom archíve)
-const heroProjekt = zobrazeneProjekty[0] || vsetkyProjekty[0];
+const hero = featuredProjects[0];
 ---
 
 <BaseLayout title="Domov | BÄM!">
-  <section
-    class="h-[100svh] flex items-center justify-center bg-black text-white overflow-hidden sticky top-0"
-  >
-    <div class="absolute inset-0 opacity-40">
-      {
-        heroProjekt?.coverImg && (
-          <Image
-            src={heroProjekt.coverImg}
-            class="w-full h-full object-cover scale-105"
-            alt={heroProjekt.entry.data.title || "Hero background"}
-            loading="eager"
-          />
-        )
-      }
-    </div>
-
-    <div
-      class="relative z-10 flex flex-col items-center px-4 w-full max-w-5xl text-center"
-    >
-      <div
-        class="w-[35vw] md:w-[20vw] max-w-2xl transform hover:scale-105 transition-transform duration-700"
-      >
-        <Logo class="w-full h-auto" />
-      </div>
-    </div>
-
-    <div
-      class="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-30 animate-bounce"
-    >
-      <span
-        class="text-[9px] uppercase tracking-[0.5em] font-extrabold italic rotate-90 inline-block text-white"
-        >Scroll</span
-      >
-    </div>
-  </section>
+  <Hero project={hero}/>
 
   <div class="relative z-30 bg-white">
     <div class="border-t border-black px-8 py-6 bg-white">
@@ -68,106 +24,13 @@ const heroProjekt = zobrazeneProjekty[0] || vsetkyProjekty[0];
       </div>
     </div>
 
-    <div class="flex flex-col bg-white py-12 md:py-24">
-      {
-        zobrazeneProjekty.map((projekt, index) => {
-          const { data } = projekt.entry;
-          return (
-            <section class="projekt-card mb-12 md:mb-24 px-6">
-              <a
-                href={`/projekty/${projekt.cleanId}`}
-                class="block no-underline group max-w-6xl mx-auto border-b border-black/10 pb-12 md:pb-24"
-              >
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                  <div
-                    class={`flex flex-col justify-center ${index % 2 === 0 ? "md:order-1" : "md:order-2"}`}
-                  >
-                    <div class="mb-6">
-                      <h3
-                        class="text-4xl sm:text-5xl lg:text-6xl font-black italic tracking-widest leading-[0.9] uppercase 
-            text-[#0000FF] 
-            lg:text-black lg:group-hover:text-[#0000FF] 
-            transition-colors duration-300"
-                      >
-                        {data.title}
-                      </h3>
-                    </div>
-                    <p class="text-black/60 font-light italic text-lg max-w-sm">
-                      {data.type || "Architektúra"}, {data.year || "2026"},{" "}
-                      {data.location || "SR"}
-                    </p>
-                  </div>
-
-                  <div
-                    class={`relative overflow-hidden aspect-[4/3] bg-gray-50 ${index % 2 === 0 ? "md:order-2" : "md:order-1"}`}
-                  >
-                    {projekt.coverImg ? (
-                      <Image
-                        src={projekt.coverImg}
-                        alt={data.title}
-                        width={900}
-                        class="w-full h-full object-cover grayscale-0 lg:grayscale lg:group-hover:grayscale-0 lg:group-hover:scale-105 transition-all duration-[1.5s] ease-out"
-                      />
-                    ) : (
-                      <div class="w-full h-full flex items-center justify-center text-xs text-black/30 font-mono">
-                        Chýba cover.jpg
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </a>
-            </section>
-          );
-        })
-      }
+<div class="flex flex-col bg-white py-12 md:py-24">
+      <FeaturedProjectsList projects={featuredProjects} />
     </div>
   </div>
 
   <div class="relative z-[25] sticky top-0">
-    <footer
-      id="kontakt"
-      class="relative bg-black text-white pt-20 pb-12 px-8 border-t border-white/10"
-    >
-      <div class="max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-20 items-end">
-          <div>
-            <div class="mb-12 w-32 md:w-48">
-              <img
-                src="/logo-bam.png"
-                alt="BAM Logo"
-                class="w-full h-auto brightness-0 invert"
-              />
-            </div>
-          </div>
-
-          <div class="flex flex-col gap-12 md:items-end">
-            <div class="flex flex-col md:items-end space-y-3">
-              <span class="label-tech text-white/20">E-mail</span>
-              <a
-                href="mailto:info@bamatelier.sk"
-                class="text-3xl md:text-5xl font-black hover:text-[#0000FF] transition-colors tracking-tighter no-underline"
-              >
-                info@bamatelier.sk
-              </a>
-            </div>
-
-            <div class="flex flex-col md:items-end space-y-3">
-              <span class="label-tech text-white/20">Mobil</span>
-              <a
-                href="tel:+421944492848"
-                class="text-xl md:text-2xl font-extrabold hover:text-[#0000FF] transition-colors tracking-widest no-underline"
-              >
-                +421 944 492 848
-              </a>
-            </div>
-
-            <span class="label-tech text-white/10 tracking-[0.3em]"
-              >© 2026 BÄM! s.r.o.</span
-            >
-          </div>
-        </div>
-      </div>
-    </footer>
+    <Footer />
   </div>
 </BaseLayout>
 
@@ -197,12 +60,13 @@ const heroProjekt = zobrazeneProjekty[0] || vsetkyProjekty[0];
       }, observerOptions);
 
       if (observer) {
-        document.querySelectorAll(".projekt-card").forEach((card) => {
+        // Zosúladené s anglickým názvom .project-card
+        document.querySelectorAll(".project-card").forEach((card) => {
           observer!.observe(card);
         });
       }
     } else {
-      document.querySelectorAll(".projekt-card").forEach((card) => {
+      document.querySelectorAll(".project-card").forEach((card) => {
         card.classList.remove("is-visible");
       });
     }

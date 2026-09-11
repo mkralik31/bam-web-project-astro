@@ -1,9 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { Image } from "astro:assets";
 import { getProjectsAndImages } from "../lib/utils";
+import ProjectsGrid from "../components/ProjectsGrid.astro";
 
-const projekty = await getProjectsAndImages();
+const projects = await getProjectsAndImages();
 ---
 
 <BaseLayout title="Projekty | BAM.">
@@ -21,54 +21,7 @@ const projekty = await getProjectsAndImages();
         </div>
       </header>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-32">
-        {
-          projekty.map((projekt) => (
-            <a
-              href={`/projekty/${projekt.cleanId}`}
-              class="group block relative no-underline text-black"
-            >
-              <div class="overflow-hidden bg-gray-50 aspect-[16/10] mb-8 border border-black/5">
-                {projekt.coverImg ? (
-                  <Image
-                    src={projekt.coverImg}
-                    alt={projekt.entry.data.title}
-                    class="w-full h-full object-cover transition-all duration-[1.5s] ease-in-out grayscale-0 scale-100 lg:grayscale lg:group-hover:grayscale-0 lg:group-hover:scale-105"
-                  />
-                ) : (
-                  <div class="w-full h-full flex items-center justify-center text-xs text-black/30 font-mono uppercase">
-                    Chýba cover image
-                  </div>
-                )}
-              </div>
-              <div class="flex justify-between items-end">
-                <div class="flex-1">
-                  <h2 class="text-3xl md:text-5xl font-black italic uppercase tracking-tighter leading-none group-hover:text-[#0000FF] transition-colors overflow-visible pr-4">
-                    {projekt.entry.data.title}
-                  </h2>
-                  <div class="flex items-center gap-4 mt-4">
-                    <span class="label-tech text-[10px] text-black/40">
-                      {projekt.entry.data.location || "Slovensko"}
-                    </span>
-                    <span class="w-8 h-[1px] bg-black/10" />
-                    <span class="label-tech text-[10px] text-[#0000FF]">
-                      {projekt.entry.data.year}
-                    </span>
-                  </div>
-                </div>
-
-                <div class="flex flex-col items-end">
-                  <span class="text-[#0000FF] translate-x-4 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-3xl italic font-black">
-                    →
-                  </span>
-                </div>
-              </div>
-
-              <div class="absolute -bottom-10 left-0 w-full h-[1px] bg-black/5 group-hover:bg-[#0000FF] transition-colors duration-500" />
-            </a>
-          ))
-        }
-      </div>
+      <ProjectsGrid projects={projects} />
     </div>
   </main>
 </BaseLayout>

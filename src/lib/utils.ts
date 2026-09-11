@@ -8,7 +8,7 @@ export interface ProjectWithImages {
 }
 
 export async function getProjectsAndImages(): Promise<ProjectWithImages[]> {
-  const vsetkyProjekty = await getCollection("projekty");
+  const allProjects = await getCollection("projekty");
 
   // Načítanie obrázkov cez relatívnu cestu
   const allImagesMap = import.meta.glob<{ default: ImageMetadata }>(
@@ -17,8 +17,8 @@ export async function getProjectsAndImages(): Promise<ProjectWithImages[]> {
 
   const imagePaths = Object.keys(allImagesMap);
 
-  return Promise.all(
-    vsetkyProjekty.map(async (entry) => {
+  const projectsWithImages = await Promise.all(
+    allProjects.map(async (entry) => {
       // Normalizujeme Windows/Linux lomítka a očistíme od index/md
       const normalizedId = entry.id.replace(/\\/g, "/");
 
@@ -68,4 +68,25 @@ export async function getProjectsAndImages(): Promise<ProjectWithImages[]> {
       };
     }),
   );
+
+  // Centralized sorting logic
+  return projectsWithImages.sort((a, b) => {
+    const orderA =
+      a.entry.data.order !== null && a.entry.data.order !== undefined
+        ? Number(a.entry.data.order)
+        : 99;
+    const orderB =
+      b.entry.data.order !== null && b.entry.data.order !== undefined
+        ? Number(b.entry.data.order)
+        : 99;
+
+    if (orderA !== orderB) {
+      return orderA - orderB;
+    }
+
+    const yearA = Number(a.entry.data.year || 0);
+    const yearB = Number(b.entry.data.year || 0);
+
+    return yearB - yearA;
+  });
 }

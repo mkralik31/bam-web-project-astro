@@ -1,0 +1,52 @@
+---
+// src/components/Hero.astro
+import { Image } from "astro:assets";
+import Logo from "./Logo.astro";
+import type { ProjectWithImages } from "../lib/utils";
+
+interface Props {
+  project?: ProjectWithImages;
+  showScroll?: boolean;
+  showLogo?: boolean;
+}
+
+const { project, showScroll = true, showLogo = true } = Astro.props;
+---
+
+<section
+  class="h-[100svh] flex items-center justify-center bg-black text-white overflow-hidden sticky top-0"
+>
+  {/* Pozadie s obrázkom */}
+  <div class="absolute inset-0 opacity-40">
+    {project?.coverImg && (
+      <a href={`/projekty/${project.cleanId}`} class="block w-full h-full">
+        <Image
+          src={project.coverImg}
+          alt={project.entry.data.title}
+          format="webp"
+          class="w-full h-full object-cover"
+        />
+      </a>
+    )}
+  </div>
+
+  {/* Stredový obsah - custom slot alebo defaultné Logo */}
+  <div class="relative z-10 flex flex-col items-center px-4 w-full max-w-5xl text-center">
+    <slot>
+      {showLogo && (
+        <div class="w-[35vw] md:w-[20vw] max-w-2xl transform hover:scale-105 transition-transform duration-700">
+          <Logo class="w-full h-auto" />
+        </div>
+      )}
+    </slot>
+  </div>
+
+  {/* Voliteľný Scroll indikátor */}
+  {showScroll && (
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 opacity-30 animate-bounce">
+      <span class="text-[9px] uppercase tracking-[0.5em] font-extrabold italic rotate-90 inline-block text-white">
+        Scroll
+      </span>
+    </div>
+  )}
+</section>
