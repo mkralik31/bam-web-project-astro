@@ -20,6 +20,7 @@
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
     "resend": "^6.12.2",
+    "sharp": "^0.35.4",
     "tailwindcss": "^4.1.18"
   },
   "devDependencies": {

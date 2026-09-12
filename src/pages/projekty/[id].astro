@@ -154,10 +154,16 @@ const { data } = projekt.entry;
               >
                 <Image
                   src={img}
-                  alt={`${data.title} - Obrázok ${index + 1}`}
+                  alt={`${data.title} - Fotografia ${index + 1}`}
+                  width={img.width}
+                  height={img.height}
+                  widths={[300, 600, 900]}
+                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  format="webp"
+                  quality={75}
+                  loading="lazy"
+                  decoding="async"
                   class="w-full h-full object-cover grayscale-0 lg:grayscale lg:group-hover:grayscale-0 transition-all duration-700 lg:group-hover:scale-110"
-                  widths={[400, 800]}
-                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                 />
               </a>
             ))}
