@@ -4,7 +4,7 @@
 <button
   id="back-to-top"
   aria-label="Návrat na vrch stránky"
-  class="fixed bottom-6 right-6 z-50 flex items-center justify-center w-12 h-12 rounded-full bg-black text-white border border-white/20 hover:bg-[#0000FF] hover:border-[#0000FF] transition-all duration-300 transform translate-y-20 opacity-0 pointer-events-none cursor-pointer group shadow-2xl"
+  class="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-[90] flex items-center justify-center w-12 h-12 rounded-full bg-black text-white border border-white/20 hover:bg-[#0000FF] hover:border-[#0000FF] transition-all duration-300 cursor-pointer group shadow-2xl"
 >
   <span class="text-xl font-black transition-transform duration-300 group-hover:-translate-y-1">
     ↑
@@ -12,36 +12,36 @@
 </button>
 
 <script>
-  function setupScrollToTop() {
+  function initBackToTop() {
     const button = document.getElementById("back-to-top");
     if (!button) return;
 
-    // Sledovanie scrollu
+    button.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
     const handleScroll = () => {
-      if (window.scrollY > 400) {
-        button.classList.remove("translate-y-20", "opacity-0", "pointer-events-none");
-        button.classList.add("translate-y-0", "opacity-100", "pointer-events-auto");
+      console.log("Aktuálny scrollY:", window.scrollY);
+      if (window.scrollY > 100) {
+        button.style.opacity = "1";
+        button.style.pointerEvents = "auto";
+        button.style.transform = "translateY(0)";
       } else {
-        button.classList.add("translate-y-20", "opacity-0", "pointer-events-none");
-        button.classList.remove("translate-y-0", "opacity-100", "pointer-events-auto");
+        button.style.opacity = "0";
+        button.style.pointerEvents = "none";
+        button.style.transform = "translateY(80px)";
       }
     };
 
-    // Plynulý scroll nahor
-    const scrollToTop = () => {
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth",
-      });
-    };
-
     window.addEventListener("scroll", handleScroll, { passive: true });
-    button.addEventListener("click", scrollToTop);
+    handleScroll();
   }
 
-  // Spustíme pri prvom načítaní
-  setupScrollToTop();
-
-  // Spustíme znova, ak používaš Astro View Transitions (Astro 3/4/5)
-  document.addEventListener("astro:page-load", setupScrollToTop);
+  document.addEventListener("astro:page-load", initBackToTop);
+  // Záloha ak nepoužívaš View Transitions
+  if (document.readyState === "complete") {
+    initBackToTop();
+  } else {
+    document.addEventListener("DOMContentLoaded", initBackToTop);
+  }
 </script>

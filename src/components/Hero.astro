@@ -24,7 +24,9 @@ const { project, showScroll = true, showLogo = true } = Astro.props;
             src={project.heroImg}
             alt={project.entry.data.title}
             format="webp"
-            class="w-full h-full object-cover"
+            loading="eager" 
+            fetchpriority="high"
+            class="w-full h-full object-cover grayscale"
           />
         </a>
       )
