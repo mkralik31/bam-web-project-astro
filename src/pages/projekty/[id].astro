@@ -23,7 +23,7 @@ const { Content } = await render(projekt.entry);
 const { data } = projekt.entry;
 ---
 
-<BaseLayout title={`${data.title} | BÄM!`}>
+<BaseLayout title={`${data.title}`}>
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/photoswipe@5.4.3/dist/photoswipe.css"
@@ -81,7 +81,7 @@ const { data } = projekt.entry;
             <span
               class="text-[11px] font-black italic uppercase text-[#0000FF] tracking-wider block"
             >
-              {data.status || "Architektúra"}
+              {data.type || "Architektúra"}
             </span>
           </div>
         </div>

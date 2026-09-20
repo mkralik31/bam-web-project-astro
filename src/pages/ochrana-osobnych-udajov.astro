@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout 
+  title="Ochrana osobných údajov" 
+  description="Informácie o spracúvaní a ochrane osobných údajov spoločnosťou bäm s.r.o."
+>
+  <main class="max-w-3xl mx-auto px-4 py-12 sm:py-20">
+    <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-8">
+      Ochrana osobných údajov
+    </h1>
+
+    <div class="space-y-8 text-neutral-700 leading-relaxed">
+      <!-- 1. Prevádzkovateľ -->
+      <section>
+        <h2 class="text-xl font-semibold text-black mb-3">1. Prevádzkovateľ osobných údajov</h2>
+        <p class="mb-3">
+          Prevádzkovateľom osobných údajov získaných prostredníctvom kontaktného formulára na webovej stránke <a href="https://atelierbam.sk" class="underline hover:text-black">atelierbam.sk</a> je:
+        </p>
+        <div class="bg-neutral-50 p-4 rounded-lg border border-neutral-200 text-sm space-y-1">
+          <p class="font-semibold text-black">bäm s. r. o.</p>
+          <p>Sídlo: Stropkovská 103/1, 821 03 Bratislava - mestská časť Ružinov</p>
+          <p>IČO: 54 877 725</p>
+          <p>Zápis: Obchodný register Mestského súdu Bratislava III, oddiel: Sro, vložka č. 163774/B</p>
+          <p>E-mail: <a href="mailto:info@atelierbam.sk" class="underline hover:text-black">info@atelierbam.sk</a></p>
+        </div>
+      </section>
+
+      <!-- 2. Rozsah a účel -->
+      <section>
+        <h2 class="text-xl font-semibold text-black mb-3">2. Rozsah, účel a právny základ spracúvania</h2>
+        <p class="mb-3">
+          Spracúvame len tie osobné údaje, ktoré nám sami poskytnete pri odoslaní kontaktného formulára (najmä meno, e-mailová adresa, telefónne číslo a samotný text správy).
+        </p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li><strong>Účel spracúvania:</strong> Vybavenie vášho dopytu, príprava cenovej ponuky alebo nadviazanie predzmluvných vzťahov.</li>
+          <li><strong>Právny základ:</strong> Plnenie zmluvy alebo vykonanie opatrení pred uzatvorením zmluvy na žiadosť dotknutej osoby (Čl. 6 ods. 1 písm. b) Nariadenia GDPR).</li>
+        </ul>
+      </section>
+
+      <!-- 3. Cookies a analytika -->
+      <section>
+        <h2 class="text-xl font-semibold text-black mb-3">3. Sledovanie a súbory cookies</h2>
+        <p>
+          Tento web využíva analytický nástroj <strong>Umami Cloud</strong>, ktorý je navrhnutý s ohľadom na maximálne súkromie (Privacy-First). Analytika nepoužíva žiadne súbory cookies, neukladá osobné údaje a nesleduje používateľov naprieč inými stránkami. Webová stránka vďaka tomu nevyžaduje zobrazenie cookie lišty.
+        </p>
+      </section>
+
+      <!-- 4. Sprostredkovatelia -->
+      <section>
+        <h2 class="text-xl font-semibold text-black mb-3">4. Poskytovanie údajov tretím stranám</h2>
+        <p class="mb-3">
+          Vaše osobné údaje nepredávame, neprenášame do tretích krajín a neposkytujeme na marketingové účely. Pre zabezpečenie technického chodu formulára využívame overené služby:
+        </p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Službu <strong>Web3Forms</strong> na bezpečný prenos správ z formulára do našej e-mailovej schránky.</li>
+          <li>Poskytovateľa webhostingu pre infraštruktúru stránky.</li>
+        </ul>
+      </section>
+
+      <!-- 5. Doba uchovávania -->
+      <section>
+        <h2 class="text-xl font-semibold text-black mb-3">5. Doba uchovávania údajov</h2>
+        <p>
+          Osobné údaje uchovávame len po dobu nevyhnutne potrebnú na vybavenie vašej požiadavky a nadväzujúcu komunikáciu, najdlhšie však po dobu 1 roka od posledného kontaktu, pokiaľ nevznikne zmluvný vzťah alebo zákonná povinnosť ich ďalšieho uchovávania.
+        </p>
+      </section>
+
+      <!-- 6. Vaše práva -->
+      <section>
+        <h2 class="text-xl font-semibold text-black mb-3">6. Vaše práva podľa GDPR</h2>
+        <p class="mb-3">Ako dotknutá osoba máte právo:</p>
+        <ul class="list-disc pl-5 space-y-1">
+          <li>Požadovať prístup k svojim osobným údajom a ich opravu.</li>
+          <li>Požadovať vymazanie ("právo na zabudnutie") alebo obmedzenie spracúvania.</li>
+          <li>Namietať proti spracúvaniu.</li>
+          <li>Podat sťažnosť na dozorný orgán – <strong>Úrad na ochranu osobných údajov Slovenskej republiky</strong> (Hraničná 12, 820 07 Bratislava).</li>
+        </ul>
+        <p class="mt-4">
+          Ak si želáte uplatniť svoje práva, kontaktujte nás na <a href="mailto:info@atelierbam.sk" class="underline hover:text-black">info@atelierbam.sk</a>.
+        </p>
+      </section>
+    </div>
+  </main>
+</BaseLayout>

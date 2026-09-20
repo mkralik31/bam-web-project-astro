@@ -1,7 +1,7 @@
 ---
 title: BYT M
 description: Z 2-izbového na 3-izbový.
-order: 2
+order: 3
 year: "2020"
 type: realizácia
 location: Bratislava

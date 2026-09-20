@@ -11,4 +11,4 @@ gallery: []
 
 ### Koncept a realizácia
 
-Rekonštrukcia dennej zóny 4-izbového bytu staršej novostavby v Petržalke. Návrh spája a zároveň dokáže oddeliť kuchyňu a chodbou podľa potrieb obyvateľov bytu. Drevené lamelové detaily vytvárajú vzdušnosť priestoru. Biela farba podčiarkuje eleganciu a charakter klienta.
+Rekonštrukcia dennej zóny 4-izbového bytu staršej novostavby v Petržalke. Návrh oddeľuje a zároveň dokáže spojiť dennú zónu s ostatnými časťami, podľa potrieb obyvateľov bytu. Drevené lamelové detaily vytvárajú vzdušnosť priestoru. Biela farba podčiarkuje eleganciu a charakter klienta.

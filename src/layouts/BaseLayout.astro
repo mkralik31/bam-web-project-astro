@@ -1,10 +1,17 @@
 ---
 import "../styles/global.css";
-import ScrollToTop from "../components/ScrollToTop.astro";
 import ContactForm from "../components/ContactForm.astro";
 import Navbar from "../components/Navbar.astro";
 import Footer from "../components/Footer.astro";
-const { title = "BAM!" } = Astro.props;
+import SEO from "../components/SEO.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title = "BÄM!", description = "Atelier BÄM!" } = Astro.props;
+const isProd = import.meta.env.PROD;
 ---
 
 <html lang="sk">
@@ -12,12 +19,22 @@ const { title = "BAM!" } = Astro.props;
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
     <meta name="viewport" content="width=device-width" />
+    <SEO title={title} description={description} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
       rel="stylesheet"
     />
+    <!-- Umami Analytics (Spúšťa sa iba na produkcii) -->
+    {isProd && (
+      <script
+        defer
+        src="https://cloud.umami.is/script.js"
+        data-website-id="5f335b95-93a1-4e51-a8d0-676057b8a854"
+        data-astro-rerun
+      />
+    )}
     <title>{title}</title>
   </head>
   <body
@@ -29,8 +46,6 @@ const { title = "BAM!" } = Astro.props;
     <main>
       <slot />
     </main>
-
-    <!-- <ScrollToTop /> -->
 
     <ContactForm />
 

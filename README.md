@@ -1,4 +1,4 @@
-# Atelier BAM – Web & Admin
+# Atelier BÄM – Web & Admin
 
 Static website built with **Astro 5**, integrated with **Keystatic CMS** (Cloud mode), and automatically deployed to **HostCreators** via GitHub Actions.
 

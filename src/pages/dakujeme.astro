@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="Ďakujeme | BÄM!">
+<BaseLayout title="Ďakujeme">
   <section
     class="min-h-[100svh] flex items-center justify-center bg-white text-black px-6 py-32"
   >
@@ -40,4 +40,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </a>
     </div>
   </section>
+  {import.meta.env.PROD && (
+    <script is:inline data-astro-rerun>
+      setTimeout(() => {
+        if (window.umami) {
+          window.umami.track('formular_odoslany');
+        }
+      }, 500);
+    </script>
+  )}
 </BaseLayout>

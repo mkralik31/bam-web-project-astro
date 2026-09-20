@@ -3,7 +3,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getProjectsAndImages } from "../lib/utils";
 import Hero from "../components/Hero.astro";
 import FeaturedProjectsList from "../components/FeaturedProjectsList.astro";
-import Footer from "../components/Footer.astro";
 
 const sortedProjects = await getProjectsAndImages();
 
@@ -14,7 +13,7 @@ const featuredProjects = sortedProjects
 const hero = sortedProjects.find((item) => item.entry.data.isHero) || sortedProjects[0];
 ---
 
-<BaseLayout title="Domov | BÄM!">
+<BaseLayout title="Domov">
   <Hero project={hero}/>
 
   <div class="relative z-30 bg-white">
