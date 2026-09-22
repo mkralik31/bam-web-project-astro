@@ -20,5 +20,10 @@ export default defineConfig({
     plugins: [tailwindcss()],
   },
 
-  integrations: [sitemap(), react()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes("/keystatic"),
+    }),
+    react(),
+  ],
 });
