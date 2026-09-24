@@ -6,16 +6,58 @@ interface Props {
 }
 
 const { 
-  title, 
-  description, 
-  image = '/images/og-default.jpg' // Predvolený obrázok, ak stránka nemá vlastný
+  title = "Atelier BAM – Architektonický ateliér Bratislava", 
+  description = "Architektonický ateliér v Bratislave. Ponúkame kompletný návrh architektúry, úvodné štúdie, návrhy interiérov na mieru a rekonštrukcie bytov či rodinných domov.",
+  image = '/images/og-default.jpg'
 } = Astro.props;
 
-const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://atelierbam.sk');
 const socialImageURL = new URL(image, Astro.site);
+
+const formattedTitle = title.includes("Atelier BAM") ? title : `${title} | Atelier BAM`;
+
+// JSON-LD štruktúrované dáta pre Google
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "ArchitecturalBusiness",
+  "name": "Atelier BAM",
+  "url": "https://atelierbam.sk",
+  "logo": "https://atelierbam.sk/favicon.svg",
+  "image": "https://atelierbam.sk/images/og-default.jpg",
+  "telephone": "+421944492848",
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Bratislava",
+    "addressRegion": "Ružinov",
+    "addressCountry": "SK"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 48.148598,
+    "longitude": 17.107748
+  },
+  "openingHoursSpecification": {
+    "@type": "OpeningHoursSpecification",
+    "dayOfWeek": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ],
+    "opens": "09:00",
+    "closes": "17:00"
+  },
+  "sameAs": [
+    "https://www.instagram.com/bamatelier"
+  ]
+};
 ---
 
-<title>{title} | BÄM!</title>
+<!-- Základné Meta Tagy -->
+<title>{formattedTitle}</title>
+<meta name="title" content={formattedTitle} />
 <meta name="description" content={description} />
 <link rel="canonical" href={canonicalURL} />
 

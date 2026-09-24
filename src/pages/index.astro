@@ -13,7 +13,8 @@ const featuredProjects = sortedProjects
 const hero = sortedProjects.find((item) => item.entry.data.isHero) || sortedProjects[0];
 ---
 
-<BaseLayout title="Domov">
+<BaseLayout title="Domov"
+description="Architektonický ateliér v Bratislave. Kompletné návrhy architektúry, interiérov, rekonštrukcie bytov a rodinných domov.">
   <Hero project={hero}/>
 
   <div class="relative z-30 bg-white">
