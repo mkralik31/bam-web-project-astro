@@ -1,15 +1,14 @@
 ---
 title: REFRESHER
-description: Office pre mladú generáciu
 order: 2
-isHero: true
-year: "2024"
+description: Office
+year: '2024'
 type: realizácia
 location: Bratislava
 featured: true
 gallery: []
+isHero: true
 ---
-
 ### Koncept a realizácia
 
-V spolupráci s partičkou zo zuhu sme pre Refresher vytvorili office, ktorý zrkadlí progresívne myslenie generácie odmietajúcej šedý priemer. Surové materiály v kontraste s dynamickou farebnosťou a svetelnými prvkami vytvárajú priestor, kde sa funkčnosť stretáva s nekompromisnou estetikou značky.
+V spolupráci so [zuhu](https://www.zuhu.sk/) sme pre Refresher vytvorili office, ktorý zrkadlí myslenie dnešnej generácie. Surové materiály v kontraste s dynamickou farebnosťou a svetelnými prvkami vytvárajú priestor, kde sa funkčnosť stretáva s charakterom značky.
