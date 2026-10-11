@@ -29,7 +29,7 @@ const { projects } = Astro.props;
           {/* Textový blok */}
           <div class="w-full md:w-1/2 flex flex-col items-start space-y-2">
             <h3 class="text-4xl md:text-6xl font-black italic uppercase tracking-wider text-[#0000FF] md:text-black md:group-hover:text-[#0000FF] transition-colors duration-300">
-              <a href={`/projekty/${cleanId}`}>
+              <a href={`/projekty/${cleanId}/`}>
                 {title}
               </a>
             </h3>
@@ -44,7 +44,7 @@ const { projects } = Astro.props;
           {/* Statický rámik (výrez) */}
           <div class="w-full md:w-1/2">
             <a
-              href={`/projekty/${cleanId}`}
+              href={`/projekty/${cleanId}/`}
               class="block w-full aspect-[4/3] overflow-hidden relative bg-gray-100"
             >
               {coverImg ? (

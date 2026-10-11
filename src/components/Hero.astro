@@ -19,7 +19,7 @@ const { project, showScroll = true, showLogo = true } = Astro.props;
   <div class="absolute inset-0 opacity-40">
     {
       project && project.heroImg && (
-        <a href={`/projekty/${project.cleanId}`} class="block w-full h-full">
+        <a href={`/projekty/${project.cleanId}/`} class="block w-full h-full">
           <Image
             src={project.heroImg}
             alt={project.entry.data.title}
